@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ece3d2; --bg-soft:#e4d9c3; --bg-panel:#fbf6ea;
+    --text:#1a1612; --muted:#5a4f40; --border:#c9bba1; --accent:#000000;
+    --serif: Georgia, "Times New Roman", serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:var(--serif); -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+  a{ color:var(--text); text-decoration:none; }
+  a:hover{ color:var(--muted); }
+  ::selection{ background:#1a1612; color:#ece3d2; }
+  @keyframes fadein{ from{ opacity:0; } to{ opacity:1; } }
+  @media (max-width:680px){
+    .nav-links{ display:none !important; }
+    .compare{ grid-template-columns:1fr !important; }
+    .compare-left{ padding-right:0 !important; }
+    .compare-right{ border-left:none !important; padding-left:0 !important; border-top:1px solid var(--border) !important; padding-top:32px !important; margin-top:32px !important; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ transition:none !important; animation:none !important; }
+  }
+</style>
+</helmet>
+
+<sc-if value="{{ owlEnabled }}" hint-placeholder-val="{{ true }}">
+  <div id="hoot-owl" aria-hidden="true" style="position:fixed; left:0; top:0; width:80px; height:80px; z-index:-1; pointer-events:none; opacity:0; transition:opacity 500ms ease; will-change:transform;">
+    <img src="assets/owl2/perch.png" alt="" style="display:block; width:100%; height:100%; object-fit:contain;">
+  </div>
+</sc-if>
+
+<header style="position:sticky; top:0; z-index:50; background:var(--bg); border-bottom:1px solid var(--border);">
+  <nav style="max-width:760px; margin:0 auto; padding:15px 24px; display:flex; align-items:center; justify-content:space-between; gap:24px;">
+    <a href="#top" style="display:flex; align-items:center; gap:10px; color:var(--text);">
+      
+      <span style="font-family:var(--serif); font-size:21px; font-weight:700; letter-spacing:-0.01em;"><span style="font-weight: normal;">Hoot</span></span>
+    </a>
+    <div class="nav-links" style="display:flex; align-items:center; gap:26px; font-family:var(--mono); font-size:11px; letter-spacing:0.11em; text-transform:uppercase; color:var(--muted);">
+      <a href="#what" style="color:var(--muted);">What it is</a>
+      <a href="#how" style="color:var(--muted);">How it works</a>
+      <a href="#institutions" style="color:var(--muted);">Institutions</a>
+      <a href="#pilot" style="color:var(--muted);">Pilot</a>
+    </div>
+    <a href="#pilot" style="font-family:var(--mono); font-size:11px; letter-spacing:0.11em; text-transform:uppercase; color:var(--text); border-bottom:1px solid var(--text); padding-bottom:2px;">Request a pilot</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <section style="max-width:760px; margin:0 auto; padding:96px 24px 76px;">
+    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 26px;">University-owned AI teaching layer</div>
+    <h1 style="font-family:var(--serif); font-weight:700; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; margin:0 0 26px; max-width:15ch;"><span style="font-weight: normal;">The institutional AI teaching layer for undergraduate courses.</span></h1>
+    <p style="font-size:19px; line-height:1.6; color:var(--muted); margin:0 0 34px; max-width:56ch;">Grounded only in your professor's released materials, citation-locked, and owned by the institution — not another chatbot students use in the dark.</p>
+    <div class="hero-cta" style="display:flex; align-items:center; gap:24px; flex-wrap:wrap;">
+      <a href="#pilot" style="background:#000; color:var(--bg); font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; padding:14px 26px;" style-hover="background:var(--text)">Request a pilot</a>
+      <a href="#what" style="font-family:var(--serif); font-size:17px; color:var(--muted); border-bottom:1px solid var(--border); padding-bottom:2px;">Keep reading ↓</a>
+    </div>
+  </section>
+
+  <section id="what" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--border); scroll-margin-top:76px;">
+    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 20px;">What it is</div>
+    <h2 style="font-family:var(--serif); font-weight:700; font-size:28px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 20px;"><span style="font-weight: normal;">A teaching layer the <b>institution</b> owns</span></h2>
+    <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:62ch;">Hoot is delivered institutionally, grounded only in the professor's released course materials, citation-locked, and owned by the school. It authenticates students, checks course membership, and answers only from what the instructor has released.</p>
+    <ul style="list-style:none; margin:30px 0 0; padding:0 0 0 20px; border-left:1px solid var(--border); display:flex; flex-direction:column; gap:12px;">
+      <li style="font-size:18px; color:var(--muted); line-height:1.5;">Not a generic student chatbot.</li>
+      <li style="font-size:18px; color:var(--muted); line-height:1.5;">Not a personal notebook.</li>
+      <li style="font-size:18px; color:var(--muted); line-height:1.5;">Not shadow AI outside school governance.</li>
+    </ul>
+  </section>
+
+  <section id="governance" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--border);">
+    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 20px;">Governance</div>
+    <h2 style="font-family:var(--serif); font-weight:700; font-size:28px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 32px;"><span style="font-weight: normal;">Shadow AI today vs </span>Hoot</h2>
+    <div class="compare" style="display:grid; grid-template-columns:1fr 1fr; gap:0;">
+      <div class="compare-left" style="padding-right:36px;">
+        <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin:0 0 14px;">Shadow AI today</div>
+        <p style="font-size:18px; line-height:1.55; color:var(--text); margin:0 0 12px;">Private. Uneven. Unmonitored. Outside institutional control.</p>
+        <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0;">Students paste coursework into tools no one governs. Some have access, some don't. The institution can't see or shape any of it.</p>
+      </div>
+      <div class="compare-right" style="padding-left:36px; border-left:1px solid var(--border);">
+        <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin:0 0 14px;">Hoot</div>
+        <p style="font-size:18px; line-height:1.55; color:var(--text); margin:0 0 12px;">Course-scoped. Cited. Membership-gated. Institution-owned.</p>
+        <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0;">Every answer is built only from released materials and stamped with a citation, available to each enrolled student on equal footing, hosted by the school.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="how" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--border); scroll-margin-top:76px;">
+    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 20px;">How it works</div>
+    <h2 style="font-family:var(--serif); font-weight:700; font-size:28px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 24px;">Two <span style="font-weight: normal;">halves,</span> one <span style="font-weight: normal;">system</span></h2>
+    <div style="display:inline-flex; border:1px solid var(--text); margin:0 0 30px; font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em;">
+      <button onClick="{{ showHoot }}" style="padding:10px 24px; border:none; cursor:pointer; background:{{ hootBg }}; color:{{ hootColor }};">Hoot</button>
+      <button onClick="{{ showApollo }}" style="padding:10px 24px; border:none; border-left:1px solid var(--text); cursor:pointer; background:{{ apolloBg }}; color:{{ apolloColor }};">Apollo</button>
+    </div>
+    <sc-if value="{{ isHoot }}" hint-placeholder-val="{{ true }}">
+      <div style="animation:fadein 160ms ease;">
+        <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:62ch;"><strong style="font-weight:700;">The answering half.</strong> A student's question becomes a cited answer built only from released course materials. If nothing relevant survives retrieval, Hoot says so instead of guessing — it can't point to a page it never read.</p>
+        <p style="font-family:var(--mono); font-size:13px; letter-spacing:0.04em; color:var(--muted); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:14px 0; margin:26px 0;">Authenticate → Retrieve → Rank → Ground → Cite</p>
+        <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0; max-width:62ch;">Only released materials are searchable. Weekly slides and notes unlock as the course reaches that week; textbooks stay visible throughout.</p>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isApollo }}">
+      <div style="animation:fadein 160ms ease;">
+        <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:62ch;"><strong style="font-weight:700;">The teaching half.</strong> A teach-back partner. The student explains a concept back, and Apollo grades what they explain against the teacher's own worked solution. It structurally can't hand over the answer — it can only check yours.</p>
+        <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:26px 0 0; max-width:62ch;">Grading is structural, not a single score: coverage, soundness, and structural similarity, plus a misconception safety layer so fluent-but-wrong explanations don't pass.</p>
+      </div>
+    </sc-if>
+  </section>
+
+  <section id="institutions" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--border); scroll-margin-top:76px;">
+    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 20px;">For institutions</div>
+    <h2 style="font-family:var(--serif); font-weight:700; font-size:28px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 20px;"><span style="font-weight: normal;">From</span> one student<span style="font-weight: normal;"> to the </span>whole classroom</h2>
+    <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:62ch;">Every graded answer updates a persistent, interpretable belief for each student and concept — confused, shaky, or mastered — that aggregates into a classroom map: class-wide strengths, weak concepts, common misconceptions, and the students who are stuck.</p>
+    <p style="font-family:var(--mono); font-size:13px; letter-spacing:0.04em; color:var(--muted); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:14px 0; margin:26px 0;">Pilot → Measure → Expand</p>
+    <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0; max-width:62ch;">Pilot one to three courses at low or no cost against success metrics agreed in advance — TA hours deflected, questions resolved. Expand to a departmental subscription once they're met.</p>
+  </section>
+
+  <section id="roadmap" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--border);">
+    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 28px;">Roadmap · 2026</div>
+    <div style="border-bottom:1px solid var(--border);">
+      <div style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Jan–Jun 2026</div>
+        <div style="font-size:18px; color:var(--text);">Purdue pilot.</div>
+      </div>
+      <div style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Jun–Aug 2026</div>
+        <div style="font-size:18px; color:var(--text);">Efficacy study at TMU with control groups.</div>
+      </div>
+      <div style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Aug–Dec 2026</div>
+        <div style="font-size:18px; color:var(--text);">Departmental expansion at Purdue.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--border);">
+    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 12px;">Questions</div>
+
+    <div style="border-top:1px solid var(--border);">
+      <button onClick="{{ toggle0 }}" style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; background:none; border:none; cursor:pointer; text-align:left; font-family:var(--serif); font-size:19px; color:var(--text);">
+        <span>Is student data private?</span>
+        <span style="font-family:var(--mono); font-size:20px; line-height:1; color:var(--muted); transition:transform 180ms ease; transform:{{ rot0 }};">+</span>
+      </button>
+      <div style="display:grid; grid-template-rows:{{ rows0 }}; transition:grid-template-rows 180ms ease;"><div style="overflow:hidden;"><p style="margin:0; padding:0 0 24px; color:var(--muted); font-size:17px; line-height:1.6; max-width:60ch;">Institution-hosted, open models, private storage. Data stays inside the school's infrastructure; nothing is handed to a third-party model provider.</p></div></div>
+    </div>
+
+    <div style="border-top:1px solid var(--border);">
+      <button onClick="{{ toggle1 }}" style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; background:none; border:none; cursor:pointer; text-align:left; font-family:var(--serif); font-size:19px; color:var(--text);">
+        <span>Can it answer outside the course materials?</span>
+        <span style="font-family:var(--mono); font-size:20px; line-height:1; color:var(--muted); transition:transform 180ms ease; transform:{{ rot1 }};">+</span>
+      </button>
+      <div style="display:grid; grid-template-rows:{{ rows1 }}; transition:grid-template-rows 180ms ease;"><div style="overflow:hidden;"><p style="margin:0; padding:0 0 24px; color:var(--muted); font-size:17px; line-height:1.6; max-width:60ch;">No. Only released materials are searchable, and answers are bounded to what they contain. If nothing relevant is found, Hoot says so rather than guessing.</p></div></div>
+    </div>
+
+    <div style="border-top:1px solid var(--border);">
+      <button onClick="{{ toggle2 }}" style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; background:none; border:none; cursor:pointer; text-align:left; font-family:var(--serif); font-size:19px; color:var(--text);">
+        <span>What does an instructor control?</span>
+        <span style="font-family:var(--mono); font-size:20px; line-height:1; color:var(--muted); transition:transform 180ms ease; transform:{{ rot2 }};">+</span>
+      </button>
+      <div style="display:grid; grid-template-rows:{{ rows2 }}; transition:grid-template-rows 180ms ease;"><div style="overflow:hidden;"><p style="margin:0; padding:0 0 24px; color:var(--muted); font-size:17px; line-height:1.6; max-width:60ch;">Upload and release of materials, when weekly slides and notes unlock, and how sources are weighted — textbook above slides and notes, tunable per course.</p></div></div>
+    </div>
+
+    <div style="border-top:1px solid var(--border);">
+      <button onClick="{{ toggle3 }}" style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; background:none; border:none; cursor:pointer; text-align:left; font-family:var(--serif); font-size:19px; color:var(--text);">
+        <span>How does a pilot start?</span>
+        <span style="font-family:var(--mono); font-size:20px; line-height:1; color:var(--muted); transition:transform 180ms ease; transform:{{ rot3 }};">+</span>
+      </button>
+      <div style="display:grid; grid-template-rows:{{ rows3 }}; transition:grid-template-rows 180ms ease;"><div style="overflow:hidden;"><p style="margin:0; padding:0 0 24px; color:var(--muted); font-size:17px; line-height:1.6; max-width:60ch;">One to three courses, at low or no cost, against success metrics agreed in advance. Expand to a departmental subscription once they're met.</p></div></div>
+    </div>
+
+    <div style="border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+      <button onClick="{{ toggle4 }}" style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; background:none; border:none; cursor:pointer; text-align:left; font-family:var(--serif); font-size:19px; color:var(--text);">
+        <span>Which models does it run on?</span>
+        <span style="font-family:var(--mono); font-size:20px; line-height:1; color:var(--muted); transition:transform 180ms ease; transform:{{ rot4 }};">+</span>
+      </button>
+      <div style="display:grid; grid-template-rows:{{ rows4 }}; transition:grid-template-rows 180ms ease;"><div style="overflow:hidden;"><p style="margin:0; padding:0 0 24px; color:var(--muted); font-size:17px; line-height:1.6; max-width:60ch;">Open models, hosted by the institution. No dependency on proprietary third-party models in production.</p></div></div>
+    </div>
+  </section>
+
+  <section id="pilot" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--border); scroll-margin-top:76px;">
+    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 20px;">Request a pilot</div>
+    <h2 style="font-family:var(--serif); font-weight:700; font-size:28px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 16px;">Start with one to three courses</h2>
+    <p style="font-size:17px; line-height:1.6; color:var(--muted); margin:0 0 32px; max-width:56ch;">Low or no cost, against success metrics agreed in advance. Tell us where to reach you.</p>
+
+    <form onSubmit="{{ onSubmit }}" noValidate="{{ true }}" style="display:flex; flex-direction:column; gap:22px; max-width:480px;">
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <label for="f-name" style="font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted);">Name</label>
+        <input id="f-name" name="name" type="text" style="font-family:var(--serif); font-size:17px; color:var(--text); background:var(--bg-panel); border:1px solid var(--border); border-radius:0; padding:12px 14px; outline:none;" style-focus="border-color:var(--text)">
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <label for="f-inst" style="font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted);">Institution</label>
+        <input id="f-inst" name="institution" type="text" style="font-family:var(--serif); font-size:17px; color:var(--text); background:var(--bg-panel); border:1px solid var(--border); border-radius:0; padding:12px 14px; outline:none;" style-focus="border-color:var(--text)">
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <label for="f-email" style="font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted);">Work email</label>
+        <input id="f-email" name="email" type="text" inputMode="email" style="font-family:var(--serif); font-size:17px; color:var(--text); background:var(--bg-panel); border:1px solid var(--border); border-radius:0; padding:12px 14px; outline:none;" style-focus="border-color:var(--text)">
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <label for="f-courses" style="font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted);">Number of courses</label>
+        <input id="f-courses" name="courses" type="number" min="1" style="font-family:var(--serif); font-size:17px; color:var(--text); background:var(--bg-panel); border:1px solid var(--border); border-radius:0; padding:12px 14px; outline:none; max-width:160px;" style-focus="border-color:var(--text)">
+      </div>
+      <div style="display:flex; align-items:center; gap:18px;">
+        <button type="submit" style="background:#000; color:var(--bg); border:none; border-radius:0; padding:14px 28px; font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; cursor:pointer;" style-hover="background:var(--text)">Request a pilot</button>
+        
+      </div>
+
+      <sc-if value="{{ showSuccess }}">
+        <p style="margin:6px 0 0; padding:20px 0 0; border-top:1px solid var(--border); font-family:var(--serif); font-size:17px; line-height:1.55; color:var(--text);">Thank you — our team will reach out to schedule an onboarding call.</p>
+      </sc-if>
+      <sc-if value="{{ showError }}">
+        <p style="margin:6px 0 0; padding:20px 0 0; border-top:1px solid var(--border); font-family:var(--serif); font-size:17px; line-height:1.55; color:var(--text);">Something went wrong — email <a href="mailto:hello@hoot.study" style="border-bottom:1px solid var(--border);">hello@hoot.study</a> directly.</p>
+      </sc-if>
+    </form>
+  </section>
+
+  <section id="team" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--border);">
+    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 20px;">Team</div>
+    <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:60ch;">Hoot is built by Ishaan Batra and Alfonso Macarrein, aerospace undergraduates at Purdue, supported by a $24,000 research grant.</p>
+  </section>
+
+</main>
+
+<footer style="max-width:760px; margin:0 auto; padding:44px 24px 80px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap; font-family:var(--mono); font-size:12px; letter-spacing:0.06em; color:var(--muted); text-transform:uppercase;">
+  <span>Hoot · <a href="mailto:hello@hoot.study" style="color:var(--muted); border-bottom:1px solid var(--border); padding-bottom:1px;">hello@hoot.study</a></span>
+  <a href="#top" style="color:var(--muted);">Back to top ↑</a>
+</footer>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;mascot&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Mascot&quot; },
+  &quot;mascotSize&quot;: { &quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 100, &quot;min&quot;: 60, &quot;max&quot;: 150, &quot;step&quot;: 5, &quot;unit&quot;: &quot;%&quot;, &quot;section&quot;: &quot;Mascot&quot; },
+  &quot;mascotPace&quot;: { &quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 1, &quot;min&quot;: 0.5, &quot;max&quot;: 2, &quot;step&quot;: 0.1, &quot;section&quot;: &quot;Mascot&quot; }
+}">
+class Component extends DCLogic {
+  state = { product: "hoot", openFaq: null, formStatus: "idle" };
+
+  reducedMotion() {
+    return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }
+
+  componentDidMount() {
+    // per-frame render height relative to base H (normalizes drawing scale across frames)
+    this._scale = {
+      stand: 1.0, wave: 0.97, sleep: 0.72, land: 0.9, hang: 0.95, fly: 0.72,
+      flap: 0.85, dance: 0.75, glide: 0.8, soar: 0.75, hover: 0.8,
+      peekl: 0.6, peek: 0.52, perch: 0.92, peekc: 0.5, wave2: 0.88,
+    };
+    this._imgs = {};
+    this._loaded = 0;
+    Object.keys(this._scale).forEach((n) => {
+      const im = new Image();
+      im.onload = () => { this._loaded++; };
+      im.src = "assets/owl2/" + n + ".png";
+      this._imgs[n] = im;
+    });
+    this._owl = { x: 0, y: 0, rot: 0, frame: "", init: false, sceneIdx: 0, candIdx: 0, candSince: 0 };
+    this._prevT = performance.now();
+    const tick = (now) => {
+      this._raf = requestAnimationFrame(tick);
+      this.owlTick(now);
+    };
+    this._raf = requestAnimationFrame(tick);
+  }
+
+  componentWillUnmount() {
+    cancelAnimationFrame(this._raf);
+  }
+
+  owlTick(now) {
+    const el = document.getElementById("hoot-owl");
+    if (!el) return;
+    const img = el.firstElementChild;
+    const dt = Math.min(0.05, (now - this._prevT) / 1000);
+    this._prevT = now;
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const sizePct = (this.props.mascotSize ?? 100) / 100;
+    const H = Math.max(46, Math.min(88, vw * 0.08)) * sizePct;
+    const pace = this.props.mascotPace ?? 1;
+    const rect = (s) => {
+      const n = document.querySelector(s);
+      return n ? n.getBoundingClientRect() : null;
+    };
+    // choreography: each scene anchors the owl's FEET (or head-top for hanging)
+    // to a piece of page structure, per the reference shots
+    const scenes = [
+      { trig: "main", anchor: ".hero-cta a", frame: "peek", mode: "feet", lift: 8, pt: (r, d) => ({ x: r.left + r.width * 0.6, y: r.top + 12 }) },
+      { trig: "#what", anchor: "#what ul", frame: "fly", mode: "feet", pt: (r, d) => ({ x: r.left - d.w * 0.5 - 6, y: r.bottom - 4 }) },
+      { trig: "#governance", anchor: "#governance", frame: "hang", mode: "top", lift: 44, pt: (r, d) => ({ x: r.right - 140, y: r.top - 3 }) },
+      { trig: "#how", anchor: "#how > div", frame: "wave2", mode: "feet", size: 0.68, pt: (r, d) => ({ x: r.left + d.w * 0.5 + 4, y: r.top - 8 }) },
+      { trig: "#institutions", anchor: "#institutions h2", frame: "fly", flip: true, mode: "feet", size: 0.9, lift: 120, pt: (r, d) => ({ x: r.right + 24, y: r.bottom + 6 }) },
+      { trig: "#roadmap", anchor: "#roadmap > div > div", frame: "flap", mode: "feet", size: 0.8, pt: (r, d) => ({ x: r.right - 90, y: r.top + 1 }) },
+      { trig: "#faq", anchor: "#faq button", frame: "sleep", mode: "feet", pt: (r, d) => ({ x: r.right - 54, y: r.top - 1 }) },
+      { trig: "#pilot", anchor: '#pilot button[type="submit"]', frame: "peek", mode: "feet", lift: 8, pt: (r, d) => ({ x: r.left + r.width / 2, y: r.top + 12 }) },
+      { trig: "#team", anchor: "#team", frame: "sleep", mode: "feet", size: 0.85, lift: 8, pt: (r, d) => ({ x: r.right - 60, y: r.top + 1 }) },
+    ];
+    const o = this._owl;
+    const reduced = this.reducedMotion();
+    const dims = (f, mul) => {
+      const nat = this._imgs[f];
+      const h = H * (this._scale[f] || 1) * (mul || 1);
+      const w = nat && nat.naturalHeight ? h * nat.naturalWidth / nat.naturalHeight : h;
+      return { w, h };
+    };
+    const sc = window.scrollY;
+    // --- perch centers in DOCUMENT coordinates (owl rides with content) ---
+    const pts = [];
+    for (let i = 0; i < scenes.length; i++) {
+      const s = scenes[i];
+      const r = rect(s.anchor);
+      if (!r) return;
+      const pd = dims(s.frame, s.size);
+      const p = s.pt(r, pd);
+      const cy = (s.mode === "top" ? p.y + pd.h / 2 : p.y - pd.h / 2) + sc;
+      pts.push({ x: p.x, y: cy });
+    }
+    // corridor route between two perches: out to the margin, along it, back in
+    const half = H * 0.6;
+    const mr = rect("#what");
+    const corrL = Math.max(half + 6, (mr ? mr.left : 0) - 44);
+    const corrR = Math.min(vw - half - 6, (mr ? mr.right : vw) + 44);
+    const route = (a, b, liftA, liftB) => {
+      // exit to the NEAREST margin (short exit keeps the owl on screen);
+      // the long horizontal run happens at the destination's height
+      const corrX = Math.abs(a.x - corrL) <= Math.abs(a.x - corrR) ? corrL : corrR;
+      let raw = [a, { x: a.x, y: a.y - liftA }, { x: corrX, y: a.y - liftA }, { x: corrX, y: b.y - liftB }, { x: b.x, y: b.y - liftB }, b];
+      raw = raw.filter((q, i2) => i2 === 0 || Math.abs(q.x - raw[i2 - 1].x) > 2 || Math.abs(q.y - raw[i2 - 1].y) > 2);
+      const path = [raw[0]];
+      for (let i2 = 1; i2 < raw.length - 1; i2++) {
+        const P = raw[i2], A = raw[i2 - 1], B = raw[i2 + 1];
+        const la = Math.hypot(A.x - P.x, A.y - P.y) || 1, lb = Math.hypot(B.x - P.x, B.y - P.y) || 1;
+        const ra = Math.min(36, la / 2), rb = Math.min(36, lb / 2);
+        path.push({ x: P.x + ((A.x - P.x) / la) * ra, y: P.y + ((A.y - P.y) / la) * ra });
+        path.push({ x: P.x + ((B.x - P.x) / lb) * rb, y: P.y + ((B.y - P.y) / lb) * rb });
+      }
+      path.push(raw[raw.length - 1]);
+      let len = 0;
+      const seg = [0];
+      for (let i2 = 1; i2 < path.length; i2++) { len += Math.hypot(path[i2].x - path[i2 - 1].x, path[i2].y - path[i2 - 1].y); seg.push(len); }
+      return { path, seg, len };
+    };
+    const lifts = scenes.map((s) => s.lift == null ? 56 : s.lift);
+    const legs = [];
+    for (let i = 0; i < pts.length - 1; i++) legs.push(route(pts[i], pts[i + 1], lifts[i], lifts[i + 1]));
+    // CONSTANT SPEED: every leg flies R path-px per scroll-px. The owl departs
+    // early enough to arrive on time (arriving early is fine — it perches and
+    // waits), and never dwells so long that it rides off the top of the screen.
+    const R = Math.max(3.4, 4.2 * pace);
+    const maxSc = Math.max(1, document.documentElement.scrollHeight - vh);
+    const T = [pts[0].y - vh * 0.62];
+    const D = [];
+    for (let i = 0; i < pts.length - 1; i++) {
+      const ideal = pts[i + 1].y - vh * 0.62;
+      const G = legs[i].len / R;
+      const d = Math.max(T[i] + 140, Math.min(ideal - G, T[i] + 300));
+      D.push(d);
+      T.push(Math.min(d + G, maxSc - 12));
+    }
+    let idx = 0;
+    for (let i = 0; i < T.length; i++) if (sc >= T[i]) idx = i;
+    // scroll direction (for facing when scrubbing backwards)
+    const dsc = sc - (o.lastSc == null ? sc : o.lastSc);
+    o.lastSc = sc;
+    if (Math.abs(dsc) > 0.5) o.dir = dsc >= 0 ? 1 : -1;
+    const dir = o.dir || 1;
+    // position = pure function of scroll
+    let px = pts[idx].x, py = pts[idx].y, tanX = 0, tanY = 0, tt = -1;
+    if (idx < scenes.length - 1) {
+      const leg = legs[idx];
+      const start = D[idx];
+      const G = Math.max(1, T[idx + 1] - start);
+      if (sc > start) {
+        tt = Math.min(1, (sc - start) / G);
+        const d = tt * leg.len;
+        o.pathD = d;
+        let i2 = 1;
+        while (i2 < leg.seg.length - 1 && leg.seg[i2] < d) i2++;
+        const A = leg.path[i2 - 1], B = leg.path[i2];
+        const sl = leg.seg[i2] - leg.seg[i2 - 1] || 1;
+        const f = (d - leg.seg[i2 - 1]) / sl;
+        px = A.x + (B.x - A.x) * f;
+        py = A.y + (B.y - A.y) * f;
+        tanX = ((B.x - A.x) / sl) * dir;
+        tanY = ((B.y - A.y) / sl) * dir;
+      }
+    }
+    const traveling = tt > 0.001 && tt < 0.999;
+    let frame, flip = false, targetRot = 0, bob = 0, breathe = 1;
+    if (traveling && !reduced) {
+      const nearEnd = dir >= 0 ? tt > 0.9 : tt < 0.1;
+      if (nearEnd) {
+        frame = "land";
+      } else {
+        // stop-motion flap driven by DISTANCE flown, not time — the owl
+        // freezes on a static frame the instant scrolling stops
+        const cyc = ["glide", "fly", "soar", "flap"];
+        frame = cyc[Math.floor(o.pathD / 42) % 4];
+      }
+      flip = tanX < -0.12;
+      const ang = Math.atan2(tanY, Math.abs(tanX) + 0.001) * 57.3;
+      targetRot = Math.max(-18, Math.min(18, ang * 0.28)) * (flip ? -1 : 1);
+    } else {
+      frame = scenes[idx].frame;
+      flip = !!scenes[idx].flip;
+    }
+    o.rot += (targetRot - o.rot) * Math.min(1, dt * 8);
+    const perched = !traveling;
+    const fd = dims(frame, perched ? scenes[idx].size : 1);
+    const sx = Math.max(fd.w / 2, Math.min(vw - fd.w / 2, px));
+    const sy = py - sc;
+    const ready = this._loaded >= 16;
+    el.style.width = fd.w + "px";
+    el.style.height = fd.h + "px";
+    el.style.opacity = ready ? "1" : "0";
+    el.style.transform = "translate3d(" + (sx - fd.w / 2) + "px," + (sy - fd.h / 2 + bob) + "px,0) rotate(" + o.rot.toFixed(2) + "deg) scale(" + breathe.toFixed(4) + ")";
+    if (img) {
+      img.style.transform = flip ? "scaleX(-1)" : "none";
+      if (frame !== o.frame && this._imgs[frame]) {
+        o.frame = frame;
+        img.src = this._imgs[frame].src;
+      }
+    }
+  }
+
+  renderVals() {
+    const { product, openFaq, formStatus } = this.state;
+    const isHoot = product === "hoot";
+    const isApollo = product === "apollo";
+
+    const vals = {
+      owlEnabled: this.props.mascot !== false,
+      isHoot,
+      isApollo,
+      showHoot: () => this.setState({ product: "hoot" }),
+      showApollo: () => this.setState({ product: "apollo" }),
+      hootBg: isHoot ? "#000000" : "transparent",
+      hootColor: isHoot ? "var(--bg)" : "var(--text)",
+      apolloBg: isApollo ? "#000000" : "transparent",
+      apolloColor: isApollo ? "var(--bg)" : "var(--text)",
+      showSuccess: formStatus === "success",
+      showError: formStatus === "error",
+      onSubmit: (e) => {
+        e.preventDefault();
+        const fd = new FormData(e.currentTarget);
+        const name = (fd.get("name") || "").toString().trim();
+        const inst = (fd.get("institution") || "").toString().trim();
+        const email = (fd.get("email") || "").toString().trim();
+        const courses = (fd.get("courses") || "").toString().trim();
+        const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        const result = name && inst && courses && emailOk ? "success" : "error";
+        this.setState({ formStatus: result });
+      },
+    };
+
+    for (let i = 0; i < 5; i++) {
+      const open = openFaq === i;
+      vals["rows" + i] = open ? "1fr" : "0fr";
+      vals["rot" + i] = open ? "rotate(45deg)" : "rotate(0deg)";
+      vals["toggle" + i] = () =>
+        this.setState((s) => ({ openFaq: s.openFaq === i ? null : i }));
+    }
+
+    return vals;
+  }
+}
+</script>
+</body>
+</html>
