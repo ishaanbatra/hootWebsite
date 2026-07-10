@@ -157,7 +157,7 @@
     <p id="apollo-pipe" style="font-family:var(--mono); font-size:13px; letter-spacing:0.04em; color:var(--muted); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:14px 0; margin:26px 0 36px;">Exact match → Symbolic proof → Calibrated entailment → Ask the student → Abstain</p>
 
     <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin:0 0 8px;">Grounded in the research</div>
-    <div style="border-bottom:1px solid var(--border);">
+    <div id="apollo-rows" style="border-bottom:1px solid var(--border);">
       <div style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
         <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Protégé effect</div>
         <div style="font-size:17px; line-height:1.55; color:var(--text);">Students learn most deeply by teaching. The student teaches a deliberately confused AI learner, and the explanation itself becomes the evidence.</div>
@@ -428,9 +428,11 @@
         { trig: "#governance", anchor: "#governance", frame: "hang", mode: "top", lift: 44, pt: function (r, d) { return { x: r.right - 140, y: r.top - 3 }; } },
         { trig: "#how", anchor: "#how > div", frame: "wave2", mode: "feet", size: 0.68, pt: function (r, d) { return { x: r.left + d.w * 0.5 + 4, y: r.top - 8 }; } },
         { trig: "#apollo", anchor: "#apollo", frame: "hang", mode: "top", lift: 44, pt: function (r, d) { return { x: r.right - 140, y: r.top - 3 }; } },
+        { trig: "#apollo", anchor: "#apollo-rows > div", frame: "wave", mode: "feet", size: 0.68, pt: function (r, d) { return { x: r.right - 90, y: r.top + 1 }; } },
         { trig: "#institutions", anchor: "#institutions h2", frame: "fly", flip: true, mode: "feet", size: 0.9, lift: 120, pt: function (r, d) { return { x: r.right + 24, y: r.bottom + 6 }; } },
         { trig: "#roadmap", anchor: "#roadmap > div > div", frame: "flap", mode: "feet", size: 0.8, pt: function (r, d) { return { x: r.right - 90, y: r.top + 1 }; } },
         { trig: "#faq", anchor: "#faq button", frame: "sleep", mode: "feet", pt: function (r, d) { return { x: r.right - 54, y: r.top - 1 }; } },
+        { trig: "#pilot", anchor: "#pilot h2", frame: "hover", mode: "feet", size: 0.8, pt: function (r, d) { return { x: r.right - 120, y: r.top + 4 }; } },
         { trig: "#pilot", anchor: '#pilot button[type="submit"]', frame: "peek", mode: "feet", lift: 8, pt: function (r, d) { return { x: r.left + r.width / 2, y: r.top + 12 }; } },
         { trig: "#team", anchor: "#team", frame: "sleep", mode: "feet", size: 0.85, lift: 8, pt: function (r, d) { return { x: r.right - 60, y: r.top + 1 }; } }
       ];
