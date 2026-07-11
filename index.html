@@ -154,7 +154,7 @@
         <text x="85" y="83" fill="var(--muted)" style="font-family:var(--serif); font-size:10px;">calibrated · their curriculum only</text>
         <circle cx="252" cy="142" r="4.5" fill="none" stroke="var(--text)" stroke-width="1.25" vector-effect="non-scaling-stroke"/>
         <text x="242" y="140" text-anchor="end" fill="var(--text)" style="font-family:var(--serif); font-size:11.5px;">LLM tutors</text>
-        <text x="242" y="153" text-anchor="end" fill="var(--muted)" style="font-family:var(--serif); font-size:10px;">Khanmigo, LearnLM · graded on opinion</text>
+        <text x="242" y="153" text-anchor="end" fill="var(--muted)" style="font-family:var(--serif); font-size:10px;">graded on opinion</text>
         <circle cx="296" cy="36" r="6" fill="var(--text)"/>
         <text x="285" y="40" text-anchor="end" fill="var(--text)" style="font-family:var(--serif); font-size:12.5px; font-weight:700;">Apollo</text>
         <text x="285" y="54" text-anchor="end" fill="var(--muted)" style="font-family:var(--serif); font-size:10px;">your materials · verified grades</text>
@@ -437,8 +437,8 @@
         { trig: "#governance", anchor: "#governance", frame: "hang", mode: "top", lift: 44, pt: function (r, d) { return { x: r.right - 140, y: r.top - 3 }; } },
         { trig: "#how", anchor: "#how > div", frame: "wave2", mode: "feet", size: 0.68, pt: function (r, d) { return { x: r.left + d.w * 0.5 + 4, y: r.top - 8 }; } },
         { trig: "#apollo", anchor: "#apollo", frame: "hang", mode: "top", lift: 44, pt: function (r, d) { return { x: r.left + 396, y: r.top - 3 }; } },
-        { trig: "#apollo", anchor: "#apollo-rows > div", frame: "wave", mode: "feet", size: 0.68, pt: function (r, d) { return { x: r.right - 90, y: r.top + 1 }; } },
-        { trig: "#institutions", anchor: "#institutions h2", frame: "fly", flip: true, mode: "feet", size: 0.9, lift: 120, pt: function (r, d) { return { x: r.right + 24, y: r.bottom + 6 }; } },
+        { trig: "#apollo", anchor: "#apollo svg", frame: "wave", mode: "feet", size: 0.6, lift: 90, pt: function (r, d) { return { x: r.left + r.width * 0.32, y: r.top + r.height * 0.86 }; } },
+        { trig: "#institutions", anchor: "#institutions h2", frame: "fly", flip: true, mode: "feet", size: 0.9, lift: 120, pt: function (r, d) { return { x: r.right + 24, y: r.top + 8 }; } },
         { trig: "#roadmap", anchor: "#roadmap > div > div", frame: "flap", mode: "feet", size: 0.8, pt: function (r, d) { return { x: r.right - 90, y: r.top + 1 }; } },
         { trig: "#faq", anchor: "#faq button", frame: "sleep", mode: "feet", pt: function (r, d) { return { x: r.right - 54, y: r.top - 1 }; } },
         { trig: "#pilot", anchor: "#pilot h2", frame: "hover", mode: "feet", size: 0.8, pt: function (r, d) { return { x: r.left - 36, y: r.top + 4 }; } },
