@@ -138,45 +138,52 @@
   <section id="apollo" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--border); scroll-margin-top:76px;">
     <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 20px;">Apollo · The measurement engine</div>
     <h2 style="font-family:var(--serif); font-weight:700; font-size:28px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 20px;">Talks <span class="fwn">like a tutor,</span> measures <span class="fwn">like an instrument</span></h2>
-    <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0 0 18px; max-width:62ch;">Every AI tutor before Apollo picked a side of a trade-off. Cognitive tutors in the MATHia lineage are true measurement instruments — model tracing, Bayesian knowledge tracing, mastery estimates calibrated by decades of learning science — but only inside their own curriculum: their textbook, their interface, their problem bank. LLM tutors like Khanmigo and LearnLM let students say anything, but the assessment is a language model's opinion — uncalibrated, unauditable, different every run.</p>
-    <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0 0 36px; max-width:62ch;">Apollo refuses the trade-off. It couples an open conversation to a deterministic measurement core — typed knowledge graphs, computer algebra, calibrated classifiers, Bayesian tracing. The LLM proposes; the symbolic core verifies. The student experiences a mind. The teacher receives an instrument.</p>
+    <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:62ch;">Cognitive tutors in the MATHia lineage measure well — but only inside their own textbook and interface. LLM tutors like Khanmigo and LearnLM talk freely — but grade on opinion. Apollo refuses the trade-off: an open conversation on the surface, a deterministic measurement core underneath, built from your professor's own materials. Nothing to adopt, retrain, or migrate.</p>
 
-    <div class="compare" style="display:grid; grid-template-columns:1fr 1fr; gap:0; margin:0 0 10px;">
-      <div class="compare-left" style="padding-right:36px;">
-        <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin:0 0 14px;">Every other tutor</div>
-        <p style="font-size:18px; line-height:1.55; color:var(--text); margin:0 0 12px;">Their curriculum, their interface, or their opinion.</p>
-        <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0;">MATHia-class tutors measure well, but only on their own textbook and click-through interface. LLM tutors accept any question but can't verify a single grade.</p>
-      </div>
-      <div class="compare-right" style="padding-left:36px; border-left:1px solid var(--border);">
-        <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin:0 0 14px;">Apollo</div>
-        <p style="font-size:18px; line-height:1.55; color:var(--text); margin:0 0 12px;">Your professor's materials. Verified grades. Zero friction.</p>
-        <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0;">Apollo builds its reference model from the course's own worked solutions — the same materials already in Hoot. Nothing to adopt, retrain, or migrate.</p>
-      </div>
-    </div>
+    <figure style="margin:36px 0 0;">
+      <svg viewBox="0 0 340 200" role="img" aria-labelledby="apollo-map-title" style="display:block; width:100%; max-width:540px; overflow:visible;">
+        <title id="apollo-map-title">Tutoring systems mapped by openness of conversation and trust in measurement. MATHia-class tutors measure but are closed; LLM tutors are open but unmeasured; Apollo alone offers both.</title>
+        <line x1="34" y1="172" x2="326" y2="172" stroke="var(--muted)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <path d="M321 168.5 L328 172 L321 175.5" fill="none" stroke="var(--muted)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <line x1="34" y1="172" x2="34" y2="14" stroke="var(--muted)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <path d="M30.5 19 L34 12 L37.5 19" fill="none" stroke="var(--muted)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <text x="180" y="190" text-anchor="middle" fill="var(--muted)" style="font-family:var(--mono); font-size:9px; letter-spacing:0.14em;">OPEN CONVERSATION</text>
+        <text transform="translate(24 93) rotate(-90)" text-anchor="middle" fill="var(--muted)" style="font-family:var(--mono); font-size:9px; letter-spacing:0.14em;">TRUSTED MEASUREMENT</text>
+        <circle cx="74" cy="72" r="4.5" fill="none" stroke="var(--text)" stroke-width="1.25" vector-effect="non-scaling-stroke"/>
+        <text x="85" y="70" fill="var(--text)" style="font-family:var(--serif); font-size:11.5px;">MATHia-class tutors</text>
+        <text x="85" y="83" fill="var(--muted)" style="font-family:var(--serif); font-size:10px;">calibrated · their curriculum only</text>
+        <circle cx="252" cy="142" r="4.5" fill="none" stroke="var(--text)" stroke-width="1.25" vector-effect="non-scaling-stroke"/>
+        <text x="242" y="140" text-anchor="end" fill="var(--text)" style="font-family:var(--serif); font-size:11.5px;">LLM tutors</text>
+        <text x="242" y="153" text-anchor="end" fill="var(--muted)" style="font-family:var(--serif); font-size:10px;">Khanmigo, LearnLM · graded on opinion</text>
+        <circle cx="296" cy="36" r="6" fill="var(--text)"/>
+        <text x="285" y="40" text-anchor="end" fill="var(--text)" style="font-family:var(--serif); font-size:12.5px; font-weight:700;">Apollo</text>
+        <text x="285" y="54" text-anchor="end" fill="var(--muted)" style="font-family:var(--serif); font-size:10px;">your materials · verified grades</text>
+      </svg>
+    </figure>
 
-    <p id="apollo-pipe" style="font-family:var(--mono); font-size:13px; letter-spacing:0.04em; color:var(--muted); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:14px 0; margin:26px 0 36px;">Exact match → Symbolic proof → Calibrated entailment → Ask the student → Abstain</p>
+    <p id="apollo-pipe" style="font-family:var(--mono); font-size:13px; letter-spacing:0.04em; color:var(--muted); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:14px 0; margin:34px 0 36px;">Exact match → Symbolic proof → Calibrated entailment → Ask the student → Abstain</p>
 
     <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin:0 0 8px;">Grounded in the research</div>
     <div id="apollo-rows" style="border-bottom:1px solid var(--border);">
       <div style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
         <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Protégé effect</div>
-        <div style="font-size:17px; line-height:1.55; color:var(--text);">Students learn most deeply by teaching. The student teaches a deliberately confused AI learner, and the explanation itself becomes the evidence.</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">Students learn most deeply by teaching — so the student teaches a deliberately confused AI learner.</div>
       </div>
       <div style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
         <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Typed knowledge graphs</div>
-        <div style="font-size:17px; line-height:1.55; color:var(--text);">Every explanation is parsed into concepts, conditions, steps, and equations — free-form speech becomes discrete, checkable evidence.</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">Free-form explanation is parsed into concepts, steps, and equations — discrete, checkable evidence.</div>
       </div>
       <div style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
         <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Verification, not vibes</div>
-        <div style="font-size:17px; line-height:1.55; color:var(--text);">Equations are proven equivalent by computer algebra, not string similarity. When nothing can prove a claim, Apollo asks the student a follow-up — embeddings never grant credit, they only decide when to ask.</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">Equations are proven equivalent by computer algebra; uncertain claims trigger a follow-up question, never silent credit.</div>
       </div>
       <div style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
         <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Bayesian knowledge tracing</div>
-        <div style="font-size:17px; line-height:1.55; color:var(--text);">Each verified grade updates a longitudinal, per-concept mastery belief — the learner model behind proven cognitive tutors, fed by richer evidence: the student's own words.</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">Each verified grade updates a per-concept mastery belief — the learner model behind proven cognitive tutors.</div>
       </div>
     </div>
 
-    <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:30px 0 0; max-width:62ch;">And when Apollo can't verify, it says so. Its honest failure mode is "I don't know — let me ask," never a confident wrong number. That refusal boundary is what raw LLM grading cannot offer, and what makes the grades trustworthy enough to carry stakes.</p>
+    <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:30px 0 0; max-width:62ch;">When Apollo can't verify, it asks the student; when it can't ask, it abstains — never a confident wrong number.</p>
   </section>
 
   <section id="institutions" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--border); scroll-margin-top:76px;">
