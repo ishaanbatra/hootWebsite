@@ -3,21 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hoot — The institutional AI teaching layer</title>
-<meta name="description" content="Hoot is the university-owned AI teaching layer for undergraduate courses — cited answers grounded only in the professor's released materials, and Apollo, a teach-back engine that verifies what students actually understand.">
+<title>Hoot: a research platform for AI in education</title>
+<script>document.documentElement.classList.add("js");</script>
+<meta name="description" content="An AI tutor you can take apart, on a platform built to run the study. For researchers, faculty and instructors studying AI in education.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@400;500&amp;family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&amp;display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#ece3d2; --bg-soft:#e4d9c3; --bg-panel:#fbf6ea;
     --text:#1a1612; --muted:#5a4f40; --border:#c9bba1; --accent:#000000;
-    --serif: Georgia, "Times New Roman", serif;
+    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
     --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
   }
   *{ box-sizing:border-box; }
   html{ scroll-behavior:smooth; }
-  body{ margin:0; background:var(--bg); color:var(--text); font-family:var(--serif); -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
   a{ color:var(--text); text-decoration:none; }
   a:hover{ color:var(--muted); }
   ::selection{ background:#1a1612; color:#ece3d2; }
@@ -25,23 +27,47 @@
 
   /* mixed-weight display headings: base bold, spans opt back to normal */
   h1, h2{ margin:0; }
-  .fwn{ font-weight:normal; }
+  .fwn{ font-weight:400; }
 
   /* interactive pseudo-states (inline styles can't express these) */
   .btn-solid{ background:#000; }
   .btn-solid:hover{ background:var(--text); }
-  .field-input{ border:1px solid var(--border); }
-  .field-input:focus{ border-color:var(--text); }
 
   /* owl mascot layer — sits behind the reading column, never over solid chrome */
   #hoot-owl{ position:fixed; left:0; top:0; width:80px; height:80px; z-index:-1; pointer-events:none; opacity:0; transition:opacity 500ms ease; will-change:transform; }
   #hoot-owl img{ display:block; width:100%; height:100%; object-fit:contain; }
 
+  /* sections are separated by a slight shift in background, not by rules.
+     The band is painted below the owl layer so the owl stays visible. */
+  body{ overflow-x:clip; }
+  .band{ position:relative; }
+  .band::before{ content:""; position:absolute; top:0; bottom:0; left:50%; width:100vw; transform:translateX(-50%); background:var(--bg-soft); z-index:-2; }
+
+  /* pages: one file, one view shown at a time (hash-routed) */
+  .js .view:not(.is-active){ display:none; }
+  .nav-links a[aria-current="page"]{ color:var(--text) !important; }
+
+  /* request-access form */
+  .access-form{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:26px 24px; margin:44px 0 0; max-width:620px; }
+  .access-form .field{ display:flex; flex-direction:column; gap:8px; }
+  .access-form input{ width:100%; min-height:52px; margin:0; padding:14px 16px; border:1px solid var(--border); border-radius:0; background:var(--bg-panel); font:400 16px/1.4 var(--sans); color:var(--text); outline:none; }
+  .access-form input:focus{ border-color:var(--text); }
+  .access-form .form-actions{ grid-column:1/-1; display:flex; align-items:center; gap:20px; flex-wrap:wrap; margin-top:6px; }
+  .access-form .form-note{ margin:0; font-size:15px; color:var(--muted); }
+  .access-form button[disabled]{ opacity:.6; cursor:default; }
+  .access-form .honey{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+  .access-done{ display:none; }
+  .is-sent .access-form, .is-sent .access-intro{ display:none; }
+  .is-sent .access-done{ display:block; }
+
   @media (max-width:680px){
-    .nav-links{ display:none !important; }
+    header nav{ flex-wrap:wrap; row-gap:10px !important; }
+    .nav-links{ order:3; width:100%; gap:22px !important; }
+    .access-form{ grid-template-columns:1fr; }
     .compare{ grid-template-columns:1fr !important; }
     .compare-left{ padding-right:0 !important; }
-    .compare-right{ border-left:none !important; padding-left:0 !important; border-top:1px solid var(--border) !important; padding-top:32px !important; margin-top:32px !important; }
+    .row{ grid-template-columns:1fr !important; gap:6px !important; }
+    .compare-right{ padding-left:0 !important; margin-top:28px !important; }
   }
   @media (max-width:820px){
     #hoot-owl{ display:none !important; }
@@ -55,257 +81,273 @@
 <body>
 
 <div id="hoot-owl" aria-hidden="true">
-  <img src="assets/owl2/perch.png" alt="">
+  <img alt="">
 </div>
 
-<header style="position:sticky; top:0; z-index:50; background:var(--bg); border-bottom:1px solid var(--border);">
+<header style="position:sticky; top:0; z-index:50; background:var(--bg);">
   <nav style="max-width:760px; margin:0 auto; padding:15px 24px; display:flex; align-items:center; justify-content:space-between; gap:24px;">
-    <a href="#top" style="display:flex; align-items:center; gap:10px; color:var(--text);">
-      <span style="font-family:var(--serif); font-size:21px; font-weight:normal; letter-spacing:-0.01em;">Hoot</span>
+    <a href="#home" style="display:flex; align-items:center; gap:10px; color:var(--text);">
+      <span style="font-family:var(--serif); font-size:21px; font-weight:500; letter-spacing:-0.01em;">Hoot</span>
     </a>
     <div class="nav-links" style="display:flex; align-items:center; gap:26px; font-family:var(--mono); font-size:11px; letter-spacing:0.11em; text-transform:uppercase; color:var(--muted);">
-      <a href="#what" style="color:var(--muted);">What it is</a>
-      <a href="#how" style="color:var(--muted);">How it works</a>
-      <a href="#apollo" style="color:var(--muted);">Apollo</a>
-      <a href="#institutions" style="color:var(--muted);">Institutions</a>
-      <a href="#pilot" style="color:var(--muted);">Pilot</a>
+      <a href="#how" data-nav="how" style="color:var(--muted);">How it works</a>
+      <a href="#research" data-nav="research" style="color:var(--muted);">Research</a>
     </div>
-    <a href="#pilot" style="font-family:var(--mono); font-size:11px; letter-spacing:0.11em; text-transform:uppercase; color:var(--text); border-bottom:1px solid var(--text); padding-bottom:2px;">Request a pilot</a>
+    <a href="#access" data-nav="access" style="font-family:var(--mono); font-size:11px; letter-spacing:0.11em; text-transform:uppercase; color:var(--text); border-bottom:1px solid var(--text); padding-bottom:2px;">Request access</a>
   </nav>
 </header>
 
 <main id="top">
 
+<div class="view is-active" data-view="home">
+
   <section style="max-width:760px; margin:0 auto; padding:96px 24px 76px;">
-    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 26px;">University-owned AI teaching layer</div>
-    <h1 style="font-family:var(--serif); font-weight:normal; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; margin:0 0 26px; max-width:15ch;">The institutional AI teaching layer for undergraduate courses.</h1>
-    <p style="font-size:19px; line-height:1.6; color:var(--muted); margin:0 0 34px; max-width:56ch;">Students get answers cited to the professor's own released materials. Teachers get Apollo — calibrated, evidence-backed measurement of what each student actually understands. Owned by the institution, not another chatbot used in the dark.</p>
+    <h1 style="font-family:var(--serif); font-weight:400; font-variation-settings:'opsz' 28; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; margin:0 0 26px; max-width:19ch;">An AI tutor you can take apart, on a platform built to run the study.</h1>
+    <p style="font-size:19px; line-height:1.6; color:var(--muted); margin:0 0 34px; max-width:56ch;">Hoot is two tutoring functions that switch on separately, and the study infrastructure around them: assignment, logging, consent and export. It is for researchers, faculty and instructors who want to know which part of an AI tutor does what.</p>
     <div class="hero-cta" style="display:flex; align-items:center; gap:24px; flex-wrap:wrap;">
-      <a class="btn-solid" href="#pilot" style="color:var(--bg); font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; padding:14px 26px;">Request a pilot</a>
-      <a href="#what" style="font-family:var(--serif); font-size:17px; color:var(--muted); border-bottom:1px solid var(--border); padding-bottom:2px;">Keep reading ↓</a>
+      <a class="btn-solid" href="#access" style="color:var(--bg); font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; padding:14px 26px;">Request access</a>
+      <a href="#problem" style="font-family:var(--sans); font-size:17px; color:var(--muted); border-bottom:1px solid var(--border); padding-bottom:2px;">Keep reading ↓</a>
     </div>
   </section>
 
-  <section id="what" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--text); scroll-margin-top:76px;">
-    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 14px;">What it is</div>
-    <h2 style="font-family:var(--serif); font-weight:700; font-size:31px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 20px;"><span class="fwn">A teaching layer the <b>institution</b> owns</span></h2>
-    <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:62ch;">Hoot is delivered institutionally, grounded only in the professor's released course materials, citation-locked, and owned by the school. Under the surface it combines LLMs, machine learning, and classroom data into one system: cited answers for students, and calibrated, evidence-backed insight for teachers into what each student actually understands — grounded in decades of learning-science research, with nothing to author, retrain, or migrate.</p>
-    <ul style="list-style:none; margin:30px 0 0; padding:0 0 0 20px; border-left:1px solid var(--border); display:flex; flex-direction:column; gap:12px;">
-      <li style="font-size:18px; color:var(--muted); line-height:1.5;">Not a generic student chatbot.</li>
-      <li style="font-size:18px; color:var(--muted); line-height:1.5;">Not a personal notebook.</li>
-      <li style="font-size:18px; color:var(--muted); line-height:1.5;">Not a tutor that locks you into its curriculum.</li>
-      <li style="font-size:18px; color:var(--muted); line-height:1.5;">Not shadow AI outside school governance.</li>
-    </ul>
-  </section>
-
-  <section id="governance" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--text);">
-    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 14px;">Governance</div>
-    <h2 style="font-family:var(--serif); font-weight:700; font-size:31px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 32px;"><span class="fwn">Shadow AI today vs </span>Hoot</h2>
-    <div class="compare" style="display:grid; grid-template-columns:1fr 1fr; gap:0;">
+  <section id="problem" class="band" style="max-width:760px; margin:0 auto; padding:80px 24px; scroll-margin-top:76px;">
+    <h2 style="font-family:var(--serif); font-weight:600; font-variation-settings:'opsz' 28; font-size:31px; line-height:1.18; letter-spacing:-0.02em; margin:0 0 32px;"><span class="fwn">Performance is </span>not learning</h2>
+    <div class="compare figures" style="display:grid; grid-template-columns:1fr 1fr; gap:0; padding:4px 0;">
       <div class="compare-left" style="padding-right:36px;">
-        <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin:0 0 14px;">Shadow AI today</div>
-        <p style="font-size:18px; line-height:1.55; color:var(--text); margin:0 0 12px;">Private. Uneven. Unmonitored. Outside institutional control.</p>
-        <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0;">Students paste coursework into tools no one governs. Some have access, some don't. The institution can't see or shape any of it.</p>
+        <p style="font-family:var(--serif); font-weight:400; font-variation-settings:'opsz' 28; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; color:var(--text); margin:0 0 10px;">48% better</p>
+        <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0;">on practice problems, with a plain chatbot.</p>
       </div>
-      <div class="compare-right" style="padding-left:36px; border-left:1px solid var(--border);">
-        <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); margin:0 0 14px;">Hoot</div>
-        <p style="font-size:18px; line-height:1.55; color:var(--text); margin:0 0 12px;">Course-scoped. Cited. Membership-gated. Institution-owned.</p>
-        <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0;">Every answer is built only from released materials and stamped with a citation, available to each enrolled student on equal footing, hosted by the school.</p>
+      <div class="compare-right" style="padding-left:36px;">
+        <p style="font-family:var(--serif); font-weight:400; font-variation-settings:'opsz' 28; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; color:var(--text); margin:0 0 10px;">17% worse</p>
+        <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0;">on the exam, once it was removed.</p>
+      </div>
+    </div>
+    <p style="font-size:18px; line-height:1.65; color:var(--text); margin:30px 0 0; max-width:62ch;">That is one large study of students given a plain chatbot (Bastani et al., 2025, PNAS). Doing well while the tool is open is not the same as having learned (Soderstrom &amp; Bjork, 2015).</p>
+    <p class="pull" style="margin:30px 0 0; padding:0 0 0 20px; border-left:1px solid var(--border); font-size:18px; color:var(--muted); line-height:1.5; max-width:60ch;">The effect depends on how the AI is designed, not on whether it is present.</p>
+  </section>
+
+  <section id="gap" style="max-width:760px; margin:0 auto; padding:80px 24px; scroll-margin-top:76px;">
+    <h2 style="font-family:var(--serif); font-weight:600; font-variation-settings:'opsz' 28; font-size:31px; line-height:1.18; letter-spacing:-0.02em; margin:0 0 20px;"><span class="fwn">What current studies </span>can't tell you</h2>
+    <div class="rows" style="margin:12px 0 0;">
+      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:14px 0;">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">AI or no AI</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">Most studies compare a class with AI to a class without. They can't say which part helped.</div>
+      </div>
+      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:14px 0;">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">One lump</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">Designed tutors are tested whole. If the result is good or bad, the cause stays inside the box.</div>
+      </div>
+      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:14px 0;">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Rebuilt every time</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">Each research team builds randomization, logging, consent and data cleaning from scratch.</div>
       </div>
     </div>
   </section>
 
-  <section id="how" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--text); scroll-margin-top:76px;">
-    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 14px;">How it works</div>
-    <h2 style="font-family:var(--serif); font-weight:700; font-size:31px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 20px;">Two <span class="fwn">halves,</span> one <span class="fwn">system</span></h2>
-    <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0 0 28px; max-width:62ch;">Hoot answers; Apollo measures. Cited answers are the foundation — the innovation is that a student's own explanations become verified, longitudinal evidence of understanding.</p>
+  <section id="adds" class="band" style="max-width:760px; margin:0 auto; padding:80px 24px; scroll-margin-top:76px;">
+    <h2 style="font-family:var(--serif); font-weight:600; font-variation-settings:'opsz' 28; font-size:31px; line-height:1.18; letter-spacing:-0.02em; margin:0 0 20px;"><span class="fwn">What this adds </span>to the field</h2>
+    <div class="rows" style="margin:12px 0 0;">
+      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:14px 0;">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Separately</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">AI functions tested one at a time, not as a single product.</div>
+      </div>
+      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:14px 0;">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Step by step</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">Designs documented at the level of each step.</div>
+      </div>
+      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:14px 0;">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Reusable</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">Infrastructure that carries to the next study.</div>
+      </div>
+    </div>
+    <p style="font-size:18px; line-height:1.65; color:var(--text); margin:30px 0 0; max-width:62ch;">Hoot is built by Ishaan Batra and Alfonso Macarrein and was awarded a research grant. Access is by request. If you are planning a study, or want to see how it works, we would be glad to talk.</p>
+    <div class="page-actions" style="display:flex; align-items:center; gap:24px; flex-wrap:wrap; margin:34px 0 0;">
+      <a class="btn-solid" href="#access" style="color:var(--bg); font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; padding:14px 26px;">Request access</a>
+      <a href="#how" style="font-family:var(--sans); font-size:17px; color:var(--muted); border-bottom:1px solid var(--border); padding-bottom:2px;">How it works →</a>
+    </div>
+  </section>
+
+</div>
+
+<div class="view" data-view="how">
+
+  <section id="functions" style="max-width:760px; margin:0 auto; padding:96px 24px 80px;">
+    <h1 style="font-family:var(--serif); font-weight:400; font-variation-settings:'opsz' 28; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; margin:0 0 26px;">Two functions, switched on separately.</h1>
+    <p style="font-size:19px; line-height:1.6; color:var(--muted); margin:0 0 34px; max-width:56ch;">Each can run alone or together, so a study can test one against the other.</p>
     <div style="display:inline-flex; border:1px solid var(--text); margin:0 0 30px; font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em;">
       <button id="switch-hoot" type="button" data-switch="hoot" style="padding:10px 24px; border:none; cursor:pointer; background:#000000; color:var(--bg);">Hoot</button>
       <button id="switch-apollo" type="button" data-switch="apollo" style="padding:10px 24px; border:none; border-left:1px solid var(--text); cursor:pointer; background:transparent; color:var(--text);">Apollo</button>
     </div>
     <div id="panel-hoot" style="animation:fadein 160ms ease;">
-      <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:62ch;"><strong style="font-weight:700;">The answering half.</strong> A student's question becomes a cited answer built only from released course materials. If nothing relevant survives retrieval, Hoot says so instead of guessing — it can't point to a page it never read.</p>
-      <p style="font-family:var(--mono); font-size:13px; letter-spacing:0.04em; color:var(--muted); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:14px 0; margin:26px 0;">Authenticate → Retrieve → Rank → Ground → Cite</p>
-      <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0; max-width:62ch;">Only released materials are searchable. Weekly slides and notes unlock as the course reaches that week; textbooks stay visible throughout.</p>
+      <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:62ch;"><strong style="font-weight:500;">Answers from the course.</strong> Hoot answers only from the material the instructor uploaded, cites where each answer came from, and declines anything outside it.</p>
     </div>
     <div id="panel-apollo" style="display:none;">
-      <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:62ch;"><strong style="font-weight:700;">The teaching half — and the real innovation.</strong> The student teaches a concept back to a deliberately confused AI learner, and Apollo grades the explanation against the professor's own worked solution. It structurally can't hand over the answer — it can only check yours.</p>
-      <p style="font-family:var(--mono); font-size:13px; letter-spacing:0.04em; color:var(--muted); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:14px 0; margin:26px 0;">Explain → Parse → Resolve → Verify → Grade → Update belief</p>
-      <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0; max-width:62ch;">Grading is structural, not a single score: what the explanation covers, whether any of it is false, and a misconception safety layer so fluent-but-wrong explanations don't pass. Every verified grade updates a Bayesian model of what each student actually knows. <a href="#apollo" style="color:var(--muted); border-bottom:1px solid var(--border); padding-bottom:1px;">How Apollo measures ↓</a></p>
+      <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:62ch;"><strong style="font-weight:500;">The student teaches.</strong> The student explains how to solve a problem, in their own words, to an owl that is competent but clueless. The owl asks about exactly the part that was thin or wrong. Nothing in Apollo affects course grades.</p>
     </div>
   </section>
 
-  <section id="apollo" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--text); scroll-margin-top:76px;">
-    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 14px;">Apollo · The measurement engine</div>
-    <h2 style="font-family:var(--serif); font-weight:700; font-size:31px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 20px;">Talks <span class="fwn">like a tutor,</span> measures <span class="fwn">like an instrument</span></h2>
-    <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:62ch;">Cognitive tutors in the MATHia lineage measure well — but only inside their own textbook and interface. LLM tutors like Khanmigo and LearnLM talk freely — but grade on opinion. Apollo refuses the trade-off: an open conversation on the surface, a deterministic measurement core underneath, built from your professor's own materials. Nothing to adopt, retrain, or migrate.</p>
+  <section id="trust" class="band" style="max-width:760px; margin:0 auto; padding:80px 24px; scroll-margin-top:76px;">
+    <h2 style="font-family:var(--serif); font-weight:600; font-variation-settings:'opsz' 28; font-size:31px; line-height:1.18; letter-spacing:-0.02em; margin:0 0 20px;"><span class="fwn">Why the responses </span>can be trusted</h2>
+    <div class="rows" style="margin:12px 0 0;">
+      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:14px 0;">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">The judge never writes</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">The judge is a classifier. For each step of an authored solution map it chooses from a fixed set of labels.</div>
+      </div>
+      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:14px 0;">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">What's covered stays covered</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">Labels add up by a fixed rule, and each credited step points to the turn that earned it.</div>
+      </div>
+      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:14px 0;">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">The persona never sees the answer</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">The owl asks its questions without access to the solution.</div>
+      </div>
+    </div>
+  </section>
 
+  <section id="science" style="max-width:760px; margin:0 auto; padding:80px 24px; scroll-margin-top:76px;">
+    <h2 style="font-family:var(--serif); font-weight:600; font-variation-settings:'opsz' 28; font-size:31px; line-height:1.18; letter-spacing:-0.02em; margin:0 0 20px;"><span class="fwn">Each part comes from </span>the literature</h2>
+    <div class="rows" style="margin:12px 0 0;">
+      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:14px 0;">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Self-explanation</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">The solution map. <span style="color:var(--muted);">Chi 1989, 1994.</span></div>
+      </div>
+      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:14px 0;">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Learning by teaching</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">The owl. <span style="color:var(--muted);">Biswas 2016.</span></div>
+      </div>
+      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:14px 0;">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Step-level formative feedback</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">The judge. <span style="color:var(--muted);">Shute 2008; VanLehn 2011.</span></div>
+      </div>
+    </div>
     <figure style="margin:36px 0 0;">
-      <svg viewBox="0 0 340 200" role="img" aria-labelledby="apollo-map-title" style="display:block; width:100%; max-width:540px; overflow:visible;">
-        <title id="apollo-map-title">Tutoring systems mapped by openness of conversation and trust in measurement. MATHia-class tutors measure but are closed; LLM tutors are open but unmeasured; Apollo alone offers both.</title>
-        <line x1="34" y1="172" x2="326" y2="172" stroke="var(--muted)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-        <path d="M321 168.5 L328 172 L321 175.5" fill="none" stroke="var(--muted)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-        <line x1="34" y1="172" x2="34" y2="14" stroke="var(--muted)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-        <path d="M30.5 19 L34 12 L37.5 19" fill="none" stroke="var(--muted)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-        <text x="180" y="190" text-anchor="middle" fill="var(--muted)" style="font-family:var(--mono); font-size:9px; letter-spacing:0.14em;">OPEN CONVERSATION</text>
-        <text transform="translate(24 93) rotate(-90)" text-anchor="middle" fill="var(--muted)" style="font-family:var(--mono); font-size:9px; letter-spacing:0.14em;">TRUSTED MEASUREMENT</text>
-        <circle cx="74" cy="72" r="4.5" fill="none" stroke="var(--text)" stroke-width="1.25" vector-effect="non-scaling-stroke"/>
-        <text x="85" y="70" fill="var(--text)" style="font-family:var(--serif); font-size:11.5px;">MATHia-class tutors</text>
-        <text x="85" y="83" fill="var(--muted)" style="font-family:var(--serif); font-size:10px;">calibrated · their curriculum only</text>
-        <circle cx="252" cy="142" r="4.5" fill="none" stroke="var(--text)" stroke-width="1.25" vector-effect="non-scaling-stroke"/>
-        <text x="242" y="140" text-anchor="end" fill="var(--text)" style="font-family:var(--serif); font-size:11.5px;">LLM tutors</text>
-        <text x="242" y="153" text-anchor="end" fill="var(--muted)" style="font-family:var(--serif); font-size:10px;">graded on opinion</text>
-        <circle cx="296" cy="36" r="6" fill="var(--text)"/>
-        <text x="285" y="40" text-anchor="end" fill="var(--text)" style="font-family:var(--serif); font-size:12.5px; font-weight:700;">Apollo</text>
-        <text x="285" y="54" text-anchor="end" fill="var(--muted)" style="font-family:var(--serif); font-size:10px;">your materials · verified grades</text>
+      <svg viewBox="0 0 340 150" role="img" aria-labelledby="effect-title" style="display:block; width:100%; max-width:540px; overflow:visible;">
+        <title id="effect-title">Effect sizes reported in VanLehn's 2011 review: human tutors 0.79, step-level systems 0.76, answer-only systems 0.31.</title>
+        <line x1="124" y1="8" x2="124" y2="128" stroke="var(--muted)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <line x1="124" y1="128" x2="334" y2="128" stroke="var(--muted)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <text x="124" y="143" text-anchor="middle" fill="var(--muted)" style="font-family:var(--mono); font-size:9px; letter-spacing:0.14em;">0</text>
+        <line x1="294" y1="125" x2="294" y2="131" stroke="var(--muted)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <text x="294" y="143" text-anchor="middle" fill="var(--muted)" style="font-family:var(--mono); font-size:9px; letter-spacing:0.14em;">1.0</text>
+        <text x="114" y="29" text-anchor="end" fill="var(--text)" style="font-family:var(--sans); font-size:11px;">Human tutors</text>
+        <rect x="124" y="18" width="134.3" height="14" fill="none" stroke="var(--text)" stroke-width="1.25" vector-effect="non-scaling-stroke"/>
+        <text x="265" y="29" fill="var(--text)" style="font-family:var(--sans); font-size:11px;">0.79</text>
+        <text x="114" y="69" text-anchor="end" fill="var(--text)" style="font-family:var(--sans); font-size:11px;">Step-level systems</text>
+        <rect x="124" y="58" width="129.2" height="14" fill="none" stroke="var(--text)" stroke-width="1.25" vector-effect="non-scaling-stroke"/>
+        <text x="260" y="69" fill="var(--text)" style="font-family:var(--sans); font-size:11px;">0.76</text>
+        <text x="114" y="109" text-anchor="end" fill="var(--text)" style="font-family:var(--sans); font-size:11px;">Answer-only systems</text>
+        <rect x="124" y="98" width="52.7" height="14" fill="none" stroke="var(--text)" stroke-width="1.25" vector-effect="non-scaling-stroke"/>
+        <text x="184" y="109" fill="var(--text)" style="font-family:var(--sans); font-size:11px;">0.31</text>
       </svg>
     </figure>
-
-    <p id="apollo-pipe" style="font-family:var(--mono); font-size:13px; letter-spacing:0.04em; color:var(--muted); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:14px 0; margin:34px 0 36px;">Exact match → Symbolic proof → Calibrated entailment → Ask the student → Abstain</p>
-
-    <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted); margin:0 0 8px;">Grounded in the research</div>
-    <div id="apollo-rows" style="border-bottom:1px solid var(--border);">
-      <div style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
-        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Protégé effect</div>
-        <div style="font-size:17px; line-height:1.55; color:var(--text);">Students learn most deeply by teaching — so the student teaches a deliberately confused AI learner.</div>
-      </div>
-      <div style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
-        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Typed knowledge graphs</div>
-        <div style="font-size:17px; line-height:1.55; color:var(--text);">Free-form explanation is parsed into concepts, steps, and equations — discrete, checkable evidence.</div>
-      </div>
-      <div style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
-        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Verification, not vibes</div>
-        <div style="font-size:17px; line-height:1.55; color:var(--text);">Equations are proven equivalent by computer algebra; uncertain claims trigger a follow-up question, never silent credit.</div>
-      </div>
-      <div style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
-        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Bayesian knowledge tracing</div>
-        <div style="font-size:17px; line-height:1.55; color:var(--text);">Each verified grade updates a per-concept mastery belief — the learner model behind proven cognitive tutors.</div>
-      </div>
-      <div style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
-        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Selective abstention</div>
-        <div style="font-size:17px; line-height:1.55; color:var(--text);">When Apollo can't verify, it asks the student; when it can't ask, it abstains — never a confident wrong number.</div>
-      </div>
+    <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:22px 0 0; max-width:62ch;">Effect sizes from VanLehn's review (2011). These figures are from prior research on other systems. Hoot has no outcome data yet.</p>
+    <div class="page-actions" style="display:flex; align-items:center; gap:24px; flex-wrap:wrap; margin:44px 0 0;">
+      <a class="btn-solid" href="#research" style="color:var(--bg); font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; padding:14px 26px;">Built for research →</a>
+      <a href="#access" style="font-family:var(--sans); font-size:17px; color:var(--muted); border-bottom:1px solid var(--border); padding-bottom:2px;">Request access</a>
     </div>
   </section>
 
-  <section id="institutions" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--text); scroll-margin-top:76px;">
-    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 14px;">For institutions</div>
-    <h2 style="font-family:var(--serif); font-weight:700; font-size:31px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 20px;"><span class="fwn">From</span> one student<span class="fwn"> to the </span>whole classroom</h2>
-    <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:62ch;">Every graded explanation updates a persistent Bayesian belief for each student and concept — confused, shaky, or mastered — that aggregates into a classroom map: class-wide strengths, weak concepts, common misconceptions, and the students who are stuck. The model is built on evidence, not embeddings: ask why it believes a student is stuck, and it points at what they actually said.</p>
-    <p style="font-family:var(--mono); font-size:13px; letter-spacing:0.04em; color:var(--muted); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:14px 0; margin:26px 0;">Pilot → Measure → Expand</p>
-    <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0; max-width:62ch;">Pilot one to three courses at low or no cost against success metrics agreed in advance — TA hours deflected, questions resolved. Expand to a departmental subscription once they're met.</p>
+</div>
+
+<div class="view" data-view="research">
+
+  <section id="platform" style="max-width:760px; margin:0 auto; padding:96px 24px 80px;">
+    <h1 style="font-family:var(--serif); font-weight:400; font-variation-settings:'opsz' 28; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; margin:0 0 26px;">Four things a study needs.</h1>
+    <div class="rows" style="margin:8px 0 0;">
+      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:14px 0;">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Study design</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">Arms, access gating and stratified assignment are settings.</div>
+      </div>
+      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:14px 0;">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Causal checks</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">The seed and assignments are logged, interaction logs are stamped by arm, and usage is reported by arm.</div>
+      </div>
+      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:14px 0;">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Consistent treatment</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">Every student in an arm gets the same intervention.</div>
+      </div>
+      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:14px 0;">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Participant safeguards, enforced in software</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">Consent is collected in the platform and hidden from the instructor until grades post. Study IDs are random. No course grades are stored. Small groups are suppressed in exports. Under-18s and withdrawals are excluded automatically.</div>
+      </div>
+    </div>
+    <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:26px 0 0; max-width:62ch;">The platform enforces a study's safeguards. A review board still approves each protocol.</p>
   </section>
 
-  <section id="roadmap" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--text);">
-    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 28px;">Roadmap · 2026</div>
-    <div style="border-bottom:1px solid var(--border);">
-      <div style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
-        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Jan–Jun 2026</div>
-        <div style="font-size:18px; color:var(--text);">Purdue pilot.</div>
+  <section id="pilot" class="band" style="max-width:760px; margin:0 auto; padding:80px 24px; scroll-margin-top:76px;">
+    <h2 style="font-family:var(--serif); font-weight:600; font-variation-settings:'opsz' 28; font-size:31px; line-height:1.18; letter-spacing:-0.02em; margin:0 0 32px;"><span class="fwn">Early pilot: </span>usage, not outcomes</h2>
+    <div class="compare figures" style="display:grid; grid-template-columns:1fr 1fr; gap:0; padding:4px 0;">
+      <div class="compare-left" style="padding-right:36px;">
+        <p style="font-family:var(--serif); font-weight:400; font-variation-settings:'opsz' 28; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; color:var(--text); margin:0 0 10px;">47%</p>
+        <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0;">of the class taught Apollo in week one.</p>
       </div>
-      <div style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
-        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Jun–Aug 2026</div>
-        <div style="font-size:18px; color:var(--text);">Efficacy study at TMU with control groups.</div>
-      </div>
-      <div style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
-        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Aug–Dec 2026</div>
-        <div style="font-size:18px; color:var(--text);">Departmental expansion at Purdue.</div>
+      <div class="compare-right" style="padding-left:36px;">
+        <p style="font-family:var(--serif); font-weight:400; font-variation-settings:'opsz' 28; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; color:var(--text); margin:0 0 10px;">119</p>
+        <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0;">teaching attempts.</p>
       </div>
     </div>
+    <p style="font-size:18px; line-height:1.65; color:var(--text); margin:30px 0 0; max-width:62ch;">Apollo was fully optional. Self-reported use matched the logs. These numbers describe use. They say nothing yet about learning.</p>
   </section>
 
-  <section id="faq" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--text);">
-    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 12px;">Questions</div>
+  <section id="faq" style="max-width:760px; margin:0 auto; padding:80px 24px; scroll-margin-top:76px;">
+    <h2 style="font-family:var(--serif); font-weight:600; font-variation-settings:'opsz' 28; font-size:31px; line-height:1.18; letter-spacing:-0.02em; margin:0 0 20px;">Questions</h2>
 
-    <div data-faq-item style="border-top:1px solid var(--border);">
-      <button type="button" data-faq-toggle style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; background:none; border:none; cursor:pointer; text-align:left; font-family:var(--serif); font-size:19px; color:var(--text);">
-        <span>Is student data private?</span>
+    <div data-faq-item style="">
+      <button type="button" data-faq-toggle style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; background:none; border:none; cursor:pointer; text-align:left; font-family:var(--serif); font-weight:500; font-size:19px; color:var(--text);">
+        <span>How is this different from MATHia, Khanmigo or LearnLM?</span>
         <span data-faq-icon style="font-family:var(--mono); font-size:20px; line-height:1; color:var(--muted); transition:transform 180ms ease; transform:rotate(0deg);">+</span>
       </button>
-      <div data-faq-panel style="display:grid; grid-template-rows:0fr; transition:grid-template-rows 180ms ease;"><div style="overflow:hidden;"><p style="margin:0; padding:0 0 24px; color:var(--muted); font-size:17px; line-height:1.6; max-width:60ch;">Institution-hosted, open models, private storage. Data stays inside the school's infrastructure; nothing is handed to a third-party model provider.</p></div></div>
+      <div data-faq-panel style="display:grid; grid-template-rows:0fr; transition:grid-template-rows 180ms ease;"><div style="overflow:hidden;"><p style="margin:0; padding:0 0 24px; color:var(--muted); font-size:17px; line-height:1.6; max-width:60ch;">MATHia-class tutors give step-level feedback inside their own curriculum. Khanmigo and LearnLM are open conversational tutors. Hoot is not offered as a better tutor than either. It runs on your course's own material and splits into functions you can switch on separately, so a study can test each one.</p></div></div>
     </div>
 
-    <div data-faq-item style="border-top:1px solid var(--border);">
-      <button type="button" data-faq-toggle style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; background:none; border:none; cursor:pointer; text-align:left; font-family:var(--serif); font-size:19px; color:var(--text);">
-        <span>Can it answer outside the course materials?</span>
+    <div data-faq-item style="">
+      <button type="button" data-faq-toggle style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; background:none; border:none; cursor:pointer; text-align:left; font-family:var(--serif); font-weight:500; font-size:19px; color:var(--text);">
+        <span>Can it answer outside the course material?</span>
         <span data-faq-icon style="font-family:var(--mono); font-size:20px; line-height:1; color:var(--muted); transition:transform 180ms ease; transform:rotate(0deg);">+</span>
       </button>
-      <div data-faq-panel style="display:grid; grid-template-rows:0fr; transition:grid-template-rows 180ms ease;"><div style="overflow:hidden;"><p style="margin:0; padding:0 0 24px; color:var(--muted); font-size:17px; line-height:1.6; max-width:60ch;">No. Only released materials are searchable, and answers are bounded to what they contain. If nothing relevant is found, Hoot says so rather than guessing.</p></div></div>
+      <div data-faq-panel style="display:grid; grid-template-rows:0fr; transition:grid-template-rows 180ms ease;"><div style="overflow:hidden;"><p style="margin:0; padding:0 0 24px; color:var(--muted); font-size:17px; line-height:1.6; max-width:60ch;">No. Hoot answers only from what the instructor uploaded and declines the rest.</p></div></div>
     </div>
 
-    <div data-faq-item style="border-top:1px solid var(--border);">
-      <button type="button" data-faq-toggle style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; background:none; border:none; cursor:pointer; text-align:left; font-family:var(--serif); font-size:19px; color:var(--text);">
-        <span>How is Apollo different from MATHia, Khanmigo, or LearnLM?</span>
-        <span data-faq-icon style="font-family:var(--mono); font-size:20px; line-height:1; color:var(--muted); transition:transform 180ms ease; transform:rotate(0deg);">+</span>
-      </button>
-      <div data-faq-panel style="display:grid; grid-template-rows:0fr; transition:grid-template-rows 180ms ease;"><div style="overflow:hidden;"><p style="margin:0; padding:0 0 24px; color:var(--muted); font-size:17px; line-height:1.6; max-width:60ch;">Those tools make you choose: adopt their curriculum and interface to get real measurement, or accept an LLM's unverifiable opinion to get open conversation. Apollo grades free-form explanation against your professor's own worked solutions and verifies every grade — open conversation and calibrated measurement, with nothing to adopt or migrate.</p></div></div>
-    </div>
-
-    <div data-faq-item style="border-top:1px solid var(--border);">
-      <button type="button" data-faq-toggle style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; background:none; border:none; cursor:pointer; text-align:left; font-family:var(--serif); font-size:19px; color:var(--text);">
+    <div data-faq-item style="">
+      <button type="button" data-faq-toggle style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; background:none; border:none; cursor:pointer; text-align:left; font-family:var(--serif); font-weight:500; font-size:19px; color:var(--text);">
         <span>What does an instructor control?</span>
         <span data-faq-icon style="font-family:var(--mono); font-size:20px; line-height:1; color:var(--muted); transition:transform 180ms ease; transform:rotate(0deg);">+</span>
       </button>
-      <div data-faq-panel style="display:grid; grid-template-rows:0fr; transition:grid-template-rows 180ms ease;"><div style="overflow:hidden;"><p style="margin:0; padding:0 0 24px; color:var(--muted); font-size:17px; line-height:1.6; max-width:60ch;">Upload and release of materials, when weekly slides and notes unlock, and how sources are weighted — textbook above slides and notes, tunable per course.</p></div></div>
+      <div data-faq-panel style="display:grid; grid-template-rows:0fr; transition:grid-template-rows 180ms ease;"><div style="overflow:hidden;"><p style="margin:0; padding:0 0 24px; color:var(--muted); font-size:17px; line-height:1.6; max-width:60ch;">Which material is uploaded, which functions are on, and the study settings.</p></div></div>
     </div>
-
-    <div data-faq-item style="border-top:1px solid var(--border);">
-      <button type="button" data-faq-toggle style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; background:none; border:none; cursor:pointer; text-align:left; font-family:var(--serif); font-size:19px; color:var(--text);">
-        <span>How does a pilot start?</span>
-        <span data-faq-icon style="font-family:var(--mono); font-size:20px; line-height:1; color:var(--muted); transition:transform 180ms ease; transform:rotate(0deg);">+</span>
-      </button>
-      <div data-faq-panel style="display:grid; grid-template-rows:0fr; transition:grid-template-rows 180ms ease;"><div style="overflow:hidden;"><p style="margin:0; padding:0 0 24px; color:var(--muted); font-size:17px; line-height:1.6; max-width:60ch;">One to three courses, at low or no cost, against success metrics agreed in advance. Expand to a departmental subscription once they're met.</p></div></div>
-    </div>
-
-    <div data-faq-item style="border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
-      <button type="button" data-faq-toggle style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; background:none; border:none; cursor:pointer; text-align:left; font-family:var(--serif); font-size:19px; color:var(--text);">
-        <span>Which models does it run on?</span>
-        <span data-faq-icon style="font-family:var(--mono); font-size:20px; line-height:1; color:var(--muted); transition:transform 180ms ease; transform:rotate(0deg);">+</span>
-      </button>
-      <div data-faq-panel style="display:grid; grid-template-rows:0fr; transition:grid-template-rows 180ms ease;"><div style="overflow:hidden;"><p style="margin:0; padding:0 0 24px; color:var(--muted); font-size:17px; line-height:1.6; max-width:60ch;">Open models, hosted by the institution. No dependency on proprietary third-party models in production.</p></div></div>
+    <div class="page-actions" style="display:flex; align-items:center; gap:24px; flex-wrap:wrap; margin:44px 0 0;">
+      <a class="btn-solid" href="#access" style="color:var(--bg); font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; padding:14px 26px;">Request access</a>
     </div>
   </section>
 
-  <section id="pilot" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--text); scroll-margin-top:76px;">
-    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 14px;">Request a pilot</div>
-    <h2 style="font-family:var(--serif); font-weight:700; font-size:31px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 16px;">Start with one to three courses</h2>
-    <p style="font-size:17px; line-height:1.6; color:var(--muted); margin:0 0 32px; max-width:56ch;">Low or no cost, against success metrics agreed in advance. Tell us where to reach you.</p>
+</div>
 
-    <form id="pilot-form" novalidate style="display:flex; flex-direction:column; gap:22px; max-width:480px;">
-      <div style="display:flex; flex-direction:column; gap:8px;">
-        <label for="f-name" style="font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted);">Name</label>
-        <input class="field-input" id="f-name" name="name" type="text" style="font-family:var(--serif); font-size:17px; color:var(--text); background:var(--bg-panel); border-radius:0; padding:12px 14px; outline:none;">
-      </div>
-      <div style="display:flex; flex-direction:column; gap:8px;">
-        <label for="f-inst" style="font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted);">Institution</label>
-        <input class="field-input" id="f-inst" name="institution" type="text" style="font-family:var(--serif); font-size:17px; color:var(--text); background:var(--bg-panel); border-radius:0; padding:12px 14px; outline:none;">
-      </div>
-      <div style="display:flex; flex-direction:column; gap:8px;">
-        <label for="f-email" style="font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted);">Work email</label>
-        <input class="field-input" id="f-email" name="email" type="text" inputmode="email" style="font-family:var(--serif); font-size:17px; color:var(--text); background:var(--bg-panel); border-radius:0; padding:12px 14px; outline:none;">
-      </div>
-      <div style="display:flex; flex-direction:column; gap:8px;">
-        <label for="f-courses" style="font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted);">Number of courses</label>
-        <input class="field-input" id="f-courses" name="courses" type="number" min="1" style="font-family:var(--serif); font-size:17px; color:var(--text); background:var(--bg-panel); border-radius:0; padding:12px 14px; outline:none; max-width:160px;">
-      </div>
-      <div style="display:flex; align-items:center; gap:18px;">
-        <button class="btn-solid" type="submit" style="color:var(--bg); border:none; border-radius:0; padding:14px 28px; font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; cursor:pointer;">Request a pilot</button>
-      </div>
+<div class="view" data-view="access">
 
-      <p id="form-success" style="display:none; margin:6px 0 0; padding:20px 0 0; border-top:1px solid var(--border); font-family:var(--serif); font-size:17px; line-height:1.55; color:var(--text);">Thank you — our team will reach out to schedule an onboarding call.</p>
-      <p id="form-error" style="display:none; margin:6px 0 0; padding:20px 0 0; border-top:1px solid var(--border); font-family:var(--serif); font-size:17px; line-height:1.55; color:var(--text);">Something went wrong — email <a href="mailto:hello@hoot.study" style="border-bottom:1px solid var(--border);">hello@hoot.study</a> directly.</p>
+  <section id="access-page" data-form-scope style="max-width:760px; margin:0 auto; padding:96px 24px 80px;">
+    <h1 style="font-family:var(--serif); font-weight:400; font-variation-settings:'opsz' 28; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; margin:0 0 26px;">Request access.</h1>
+    <p class="access-intro" style="font-size:19px; line-height:1.6; color:var(--muted); margin:0; max-width:40ch;">Access is by request. Tell us where to reach you and one of us will get back to you.</p>
+    <form class="access-form" id="access-form" novalidate>
+      <div class="field"><label for="a-first" style="font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted);">First name</label><input id="a-first" name="first_name" type="text" autocomplete="given-name" required></div>
+      <div class="field"><label for="a-last" style="font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted);">Last name</label><input id="a-last" name="last_name" type="text" autocomplete="family-name" required></div>
+      <div class="field"><label for="a-email" style="font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted);">Email</label><input id="a-email" name="email" type="email" autocomplete="email" inputmode="email" required></div>
+      <div class="field"><label for="a-inst" style="font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted);">Institution</label><input id="a-inst" name="institution" type="text" autocomplete="organization" required></div>
+      <div class="honey" aria-hidden="true"><label for="a-honey">Leave blank</label><input id="a-honey" name="_honey" type="text" tabindex="-1" autocomplete="off"></div>
+      <div class="form-actions"><button class="btn-solid" type="submit" style="color:var(--bg); border:none; border-radius:0; padding:14px 28px; font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; cursor:pointer;">Request access</button><p class="form-note" aria-live="polite"></p></div>
     </form>
+    <p class="access-done" aria-live="polite" style="font-size:18px; line-height:1.65; color:var(--text); margin:44px 0 0; padding:24px 0 0; max-width:62ch;">Thanks. One of us will reach out.</p>
+    <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:44px 0 0; max-width:62ch;">Or reach us directly.</p>
+    <div class="page-actions" style="display:flex; align-items:center; gap:24px; flex-wrap:wrap; margin:16px 0 0;">
+      <a href="https://www.linkedin.com/in/ishaanbatra1/" target="_blank" rel="noopener" style="font-family:var(--sans); font-size:17px; color:var(--text); border-bottom:1px solid var(--text); padding-bottom:2px;">Ishaan Batra on LinkedIn</a>
+      <a href="https://www.linkedin.com/in/alfonso-macarrein/" target="_blank" rel="noopener" style="font-family:var(--sans); font-size:17px; color:var(--text); border-bottom:1px solid var(--text); padding-bottom:2px;">Alfonso Macarrein on LinkedIn</a>
+    </div>
   </section>
 
-  <section id="team" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--text);">
-    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 20px;">Team</div>
-    <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:60ch;">Hoot is built by Ishaan Batra and Alfonso Macarrein, aerospace undergraduates at Purdue, supported by a $24,000 research grant.</p>
-  </section>
+</div>
 
 </main>
 
-<footer style="max-width:760px; margin:0 auto; padding:44px 24px 80px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap; font-family:var(--mono); font-size:12px; letter-spacing:0.06em; color:var(--muted); text-transform:uppercase;">
-  <span>Hoot · <a href="mailto:hello@hoot.study" style="color:var(--muted); border-bottom:1px solid var(--border); padding-bottom:1px;">hello@hoot.study</a></span>
+<footer style="max-width:760px; margin:0 auto; padding:44px 24px 80px; display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap; font-family:var(--mono); font-size:12px; letter-spacing:0.06em; color:var(--muted); text-transform:uppercase;">
+  <span>Hoot</span>
   <a href="#top" style="color:var(--muted);">Back to top ↑</a>
 </footer>
 
@@ -316,6 +358,61 @@
   var reducedMotion = function () {
     return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   };
+
+  /* ---------- Pages: hash-routed views in one file ---------- */
+  (function () {
+    var views = [].slice.call(document.querySelectorAll("[data-view]"));
+    var navs = [].slice.call(document.querySelectorAll("[data-nav]"));
+    var base = document.title;
+    var titles = { home: base, how: "How it works · Hoot", research: "Built for research · Hoot", access: "Request access · Hoot" };
+    var current = "home";
+    function top() { window.scrollTo({ top: 0, left: 0, behavior: "instant" }); }
+    function show(name) {
+      current = name;
+      views.forEach(function (v) { v.classList.toggle("is-active", v.getAttribute("data-view") === name); });
+      navs.forEach(function (n) {
+        if (n.getAttribute("data-nav") === name) n.setAttribute("aria-current", "page"); else n.removeAttribute("aria-current");
+      });
+      document.title = titles[name] || base;
+    }
+    function has(name) { return views.some(function (v) { return v.getAttribute("data-view") === name; }); }
+    function route() {
+      var id = decodeURIComponent(location.hash.slice(1));
+      if (!id || id === "top" || id === "home") { if (current !== "home") show("home"); top(); return; }
+      if (has(id)) { show(id); top(); return; }
+      // an anchor inside a hidden page opens that page first
+      var el = document.getElementById(id);
+      var view = el && el.closest("[data-view]");
+      if (view && current !== view.getAttribute("data-view")) { show(view.getAttribute("data-view")); el.scrollIntoView(); }
+    }
+    window.addEventListener("hashchange", route);
+    route();
+  })();
+
+  /* ---------- Request-access form ---------- */
+  (function () {
+    // Where the request goes. FormSubmit forwards it to this inbox with no
+    // account; swap the URL to use another service.
+    var ENDPOINT = "https://formsubmit.co/ajax/hello@hoot.study";
+    var form = document.getElementById("access-form");
+    if (!form) return;
+    var scope = form.closest("[data-form-scope]");
+    var note = form.querySelector(".form-note");
+    var button = form.querySelector('button[type="submit"]');
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!form.checkValidity()) { note.textContent = "Please fill in every field."; form.querySelector(":invalid").focus(); return; }
+      var data = {};
+      new FormData(form).forEach(function (v, k) { data[k] = v; });
+      if (data._honey) return;
+      data._subject = "Hoot access request · " + data.first_name + " " + data.last_name;
+      data._template = "table";
+      button.disabled = true; note.textContent = "Sending…";
+      fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" }, body: JSON.stringify(data) })
+        .then(function (res) { if (!res.ok) throw new Error(res.status); scope.classList.add("is-sent"); note.textContent = ""; })
+        .catch(function () { note.textContent = "That didn't send. Reach us on LinkedIn below."; button.disabled = false; });
+    });
+  })();
 
   /* ---------- Product switcher (Hoot ⇄ Apollo) ---------- */
   (function () {
@@ -369,27 +466,6 @@
     });
   })();
 
-  /* ---------- Pilot-request form (client-side only) ---------- */
-  (function () {
-    var form = document.getElementById("pilot-form");
-    var success = document.getElementById("form-success");
-    var error = document.getElementById("form-error");
-    if (!form) return;
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var fd = new FormData(form);
-      var name = (fd.get("name") || "").toString().trim();
-      var inst = (fd.get("institution") || "").toString().trim();
-      var email = (fd.get("email") || "").toString().trim();
-      var courses = (fd.get("courses") || "").toString().trim();
-      var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-      var ok = name && inst && courses && emailOk;
-      success.style.display = ok ? "block" : "none";
-      error.style.display = ok ? "none" : "block";
-    });
-  })();
-
   /* ---------- Owl mascot: scroll-driven flight through the page ---------- */
   (function () {
     var el = document.getElementById("hoot-owl");
@@ -402,14 +478,21 @@
       flap: 0.85, dance: 0.75, glide: 0.8, soar: 0.75, hover: 0.8,
       peekl: 0.6, peek: 0.52, perch: 0.92, peekc: 0.5, wave2: 0.88
     };
+    // only the frames the choreography uses; fetched the first time the owl
+    // can actually be seen (never on small screens, where it is hidden)
+    var used = ["peek", "peekl", "hang", "wave2", "stand", "wave", "flap", "perch", "sleep", "glide", "fly", "soar", "land"];
     var imgs = {};
     var loaded = 0;
-    Object.keys(scale).forEach(function (n) {
-      var im = new Image();
-      im.onload = function () { loaded++; };
-      im.src = "assets/owl2/" + n + ".png";
-      imgs[n] = im;
-    });
+    var requested = false;
+    function preload() {
+      requested = true;
+      used.forEach(function (n) {
+        var im = new Image();
+        im.onload = function () { loaded++; };
+        im.src = "assets/owl2/" + n + ".png";
+        imgs[n] = im;
+      });
+    }
 
     var o = { rot: 0, frame: "", dir: 1, lastSc: null, pathD: 0 };
     var prevT = performance.now();
@@ -425,6 +508,8 @@
       var dt = Math.min(0.05, (now - prevT) / 1000);
       prevT = now;
       var vw = window.innerWidth, vh = window.innerHeight;
+      if (vw <= 820) return;            // hidden by CSS at this width: do no work
+      if (!requested) preload();
       var H = Math.max(46, Math.min(88, vw * 0.08));
       var pace = 1;
       var reduced = reducedMotion();
@@ -432,19 +517,26 @@
       // choreography: each scene anchors the owl's FEET (or head-top for hanging)
       // to a piece of page structure, per the reference shots
       var scenes = [
-        { trig: "main", anchor: ".hero-cta a", frame: "peek", mode: "feet", lift: 8, pt: function (r, d) { return { x: r.left + r.width * 0.6, y: r.top + 12 }; } },
-        { trig: "#what", anchor: "#what ul", frame: "fly", mode: "feet", pt: function (r, d) { return { x: r.left - d.w * 0.5 - 6, y: r.bottom - 4 }; } },
-        { trig: "#governance", anchor: "#governance", frame: "hang", mode: "top", lift: 44, pt: function (r, d) { return { x: r.right - 140, y: r.top - 3 }; } },
-        { trig: "#how", anchor: "#how > div", frame: "wave2", mode: "feet", size: 0.68, pt: function (r, d) { return { x: r.left + d.w * 0.5 + 4, y: r.top - 8 }; } },
-        { trig: "#apollo", anchor: "#apollo", frame: "hang", mode: "top", lift: 44, pt: function (r, d) { return { x: r.left + 396, y: r.top - 3 }; } },
-        { trig: "#apollo", anchor: "#apollo svg", frame: "wave", mode: "feet", size: 0.6, lift: 90, pt: function (r, d) { return { x: r.left + r.width * 0.32, y: r.top + r.height * 0.86 }; } },
-        { trig: "#institutions", anchor: "#institutions h2", frame: "fly", flip: true, mode: "feet", size: 0.9, lift: 120, pt: function (r, d) { return { x: r.right + 24, y: r.top + 8 }; } },
-        { trig: "#roadmap", anchor: "#roadmap > div > div", frame: "flap", mode: "feet", size: 0.8, pt: function (r, d) { return { x: r.right - 90, y: r.top + 1 }; } },
-        { trig: "#faq", anchor: "#faq button", frame: "sleep", mode: "feet", pt: function (r, d) { return { x: r.right - 54, y: r.top - 1 }; } },
-        { trig: "#pilot", anchor: "#pilot h2", frame: "hover", mode: "feet", size: 0.8, pt: function (r, d) { return { x: r.left - 36, y: r.top + 4 }; } },
-        { trig: "#pilot", anchor: '#pilot button[type="submit"]', frame: "peek", mode: "feet", lift: 8, pt: function (r, d) { return { x: r.left + r.width / 2, y: r.top + 12 }; } },
-        { trig: "#team", anchor: "#team", frame: "sleep", mode: "feet", size: 0.85, lift: 8, pt: function (r, d) { return { x: r.right - 60, y: r.top + 1 }; } }
+        // home
+        { anchor: ".hero-cta a", frame: "peek", mode: "feet", lift: -14, pt: function (r, d) { return { x: r.left + r.width * 0.6, y: r.top + 12 }; } },
+        { anchor: "#problem .pull", frame: "peekl", mode: "feet", lift: 0, arrive: 0.5, pt: function (r, d) { return { x: r.left - d.w * 0.5 + 1, y: r.bottom }; } },
+        { anchor: "#gap", frame: "hang", mode: "top", lift: 44, pt: function (r, d) { return { x: r.right - 140, y: r.top - 3 }; } },
+        { anchor: "#adds", frame: "sleep", flip: true, mode: "feet", size: 0.85, lift: 8, pt: function (r, d) { return { x: r.right - 60, y: r.top + 1 }; } },
+        // how it works
+        { anchor: "#functions h1", frame: "wave2", mode: "feet", size: 0.68, pt: function (r, d) { return { x: r.left + d.w * 0.5 + 4, y: r.top - 8 }; } },
+        { anchor: "#trust", frame: "stand", mode: "feet", size: 0.8, lift: 6, pt: function (r, d) { return { x: r.right - 114, y: r.top + 1 }; } },
+        { anchor: "#science svg", frame: "wave", mode: "feet", size: 0.6, lift: 90, pt: function (r, d) { return { x: r.left + r.width * 0.93, y: r.top + r.height * 0.853 }; } },
+        // research
+        { anchor: "#platform .row", frame: "flap", mode: "feet", size: 0.8, pt: function (r, d) { return { x: r.right - 90, y: r.top + 1 }; } },
+        { anchor: "#pilot", frame: "perch", mode: "feet", size: 0.8, pt: function (r, d) { return { x: r.right - 94, y: r.top + 1 }; } },
+        { anchor: "#faq", frame: "sleep", mode: "feet", pt: function (r, d) { return { x: r.right - 78, y: r.top + 1 }; } },
+        // request access
+        { anchor: '#access-form button[type="submit"]', frame: "peek", mode: "feet", lift: 8, pt: function (r, d) { return { x: r.left + r.width / 2, y: r.top + 12 }; } }
       ];
+      // only the scenes on the page being shown; a missing or hidden anchor is
+      // skipped, not fatal
+      scenes = scenes.filter(function (s) { s.r = rect(s.anchor); return !!s.r && (s.r.width > 0 || s.r.height > 0); });
+      if (!scenes.length) { el.style.opacity = "0"; return; }
 
       var dims = function (f, mul) {
         var nat = imgs[f];
@@ -458,8 +550,7 @@
       var pts = [];
       for (var i = 0; i < scenes.length; i++) {
         var s = scenes[i];
-        var r = rect(s.anchor);
-        if (!r) return;
+        var r = s.r;
         var pd = dims(s.frame, s.size);
         var p = s.pt(r, pd);
         var cy = (s.mode === "top" ? p.y + pd.h / 2 : p.y - pd.h / 2) + sc;
@@ -468,7 +559,7 @@
 
       // corridor route between two perches: out to the margin, along it, back in
       var half = H * 0.6;
-      var mr = rect("#what");
+      var mr = rect("header nav");
       var corrL = Math.max(half + 6, (mr ? mr.left : 0) - 44);
       var corrR = Math.min(vw - half - 6, (mr ? mr.right : vw) + 44);
       var route = function (a, b, liftA, liftB) {
@@ -507,6 +598,7 @@
         var ideal = pts[ti + 1].y - vh * 0.62;
         var G0 = legs[ti].len / R;
         var d0 = Math.max(T[ti] + 140, Math.min(ideal - G0, T[ti] + 300));
+        if (ti === 0) d0 = Math.max(d0, 40);   // every page opens with the owl perched, not mid-flight
         D.push(d0);
         T.push(Math.min(d0 + G0, maxSc - 12));
       }
@@ -542,6 +634,7 @@
         }
       }
 
+      if (reduced) { idx = 0; px = pts[0].x; py = pts[0].y; tt = -1; o.rot = 0; }
       var traveling = tt > 0.001 && tt < 0.999;
       var frame, flip = false, targetRot = 0, bob = 0, breathe = 1;
       if (traveling && !reduced) {
@@ -564,10 +657,13 @@
 
       o.rot += (targetRot - o.rot) * Math.min(1, dt * 8);
       var perched = !traveling;
-      var fd = dims(frame, perched ? scenes[idx].size : 1);
+      var mul = 1;
+      if (perched) mul = scenes[idx].size;
+      else if (frame === "land") { var ds = scenes[dir >= 0 ? idx + 1 : idx]; mul = ds.arrive || ds.size || 1; }
+      var fd = dims(frame, mul);
       var sx = Math.max(fd.w / 2, Math.min(vw - fd.w / 2, px));
       var sy = py - sc;
-      var ready = loaded >= 16;
+      var ready = loaded >= used.length;
       el.style.width = fd.w + "px";
       el.style.height = fd.h + "px";
       el.style.opacity = ready ? "1" : "0";
