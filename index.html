@@ -409,7 +409,8 @@
       data._template = "table";
       button.disabled = true; note.textContent = "Sending…";
       fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" }, body: JSON.stringify(data) })
-        .then(function (res) { if (!res.ok) throw new Error(res.status); scope.classList.add("is-sent"); note.textContent = ""; })
+        .then(function (res) { if (!res.ok) throw new Error(res.status); return res.json(); })
+        .then(function (body) { if (String(body.success) !== "true") throw new Error(body.message); scope.classList.add("is-sent"); note.textContent = ""; })
         .catch(function () { note.textContent = "That didn't send. Reach us on LinkedIn below."; button.disabled = false; });
     });
   })();
