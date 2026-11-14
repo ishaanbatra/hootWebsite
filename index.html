@@ -7,17 +7,18 @@
 <meta name="description" content="An AI tutor you can take apart, on a platform built to run the study. For researchers, faculty and instructors studying AI in education.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,500;8..60,700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#ece3d2; --bg-soft:#e4d9c3; --bg-panel:#fbf6ea;
     --text:#1a1612; --muted:#5a4f40; --border:#c9bba1; --accent:#000000;
-    --serif: Georgia, "Times New Roman", serif;
+    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
     --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
   }
   *{ box-sizing:border-box; }
   html{ scroll-behavior:smooth; }
-  body{ margin:0; background:var(--bg); color:var(--text); font-family:var(--serif); -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
   a{ color:var(--text); text-decoration:none; }
   a:hover{ color:var(--muted); }
   ::selection{ background:#1a1612; color:#ece3d2; }
@@ -25,7 +26,7 @@
 
   /* mixed-weight display headings: base bold, spans opt back to normal */
   h1, h2{ margin:0; }
-  .fwn{ font-weight:normal; }
+  .fwn{ font-weight:500; }
 
   /* interactive pseudo-states (inline styles can't express these) */
   .btn-solid{ background:#000; }
@@ -60,7 +61,7 @@
 <header style="position:sticky; top:0; z-index:50; background:var(--bg); border-bottom:1px solid var(--border);">
   <nav style="max-width:760px; margin:0 auto; padding:15px 24px; display:flex; align-items:center; justify-content:space-between; gap:24px;">
     <a href="#top" style="display:flex; align-items:center; gap:10px; color:var(--text);">
-      <span style="font-family:var(--serif); font-size:21px; font-weight:normal; letter-spacing:-0.01em;">Hoot</span>
+      <span style="font-family:var(--serif); font-size:21px; font-weight:500; letter-spacing:-0.01em;">Hoot</span>
     </a>
     <div class="nav-links" style="display:flex; align-items:center; gap:26px; font-family:var(--mono); font-size:11px; letter-spacing:0.11em; text-transform:uppercase; color:var(--muted);">
       <a href="#problem" style="color:var(--muted);">Problem</a>
@@ -76,11 +77,11 @@
 
   <section style="max-width:760px; margin:0 auto; padding:96px 24px 76px;">
     <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 26px;">A research platform for AI in education</div>
-    <h1 style="font-family:var(--serif); font-weight:normal; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; margin:0 0 26px; max-width:19ch;">An AI tutor you can take apart, on a platform built to run the study.</h1>
+    <h1 style="font-family:var(--serif); font-weight:500; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; margin:0 0 26px; max-width:19ch;">An AI tutor you can take apart, on a platform built to run the study.</h1>
     <p style="font-size:19px; line-height:1.6; color:var(--muted); margin:0 0 34px; max-width:56ch;">Hoot is two tutoring functions that switch on separately, and the study infrastructure around them: assignment, logging, consent and export. It is for researchers, faculty and instructors who want to know which part of an AI tutor does what.</p>
     <div class="hero-cta" style="display:flex; align-items:center; gap:24px; flex-wrap:wrap;">
       <a class="btn-solid" href="#access" style="color:var(--bg); font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; padding:14px 26px;">Request access</a>
-      <a href="#problem" style="font-family:var(--serif); font-size:17px; color:var(--muted); border-bottom:1px solid var(--border); padding-bottom:2px;">Keep reading ↓</a>
+      <a href="#problem" style="font-family:var(--sans); font-size:17px; color:var(--muted); border-bottom:1px solid var(--border); padding-bottom:2px;">Keep reading ↓</a>
     </div>
   </section>
 
@@ -89,11 +90,11 @@
     <h2 style="font-family:var(--serif); font-weight:700; font-size:31px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 32px;"><span class="fwn">Performance is </span>not learning</h2>
     <div class="compare figures" style="display:grid; grid-template-columns:1fr 1fr; gap:0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:28px 0;">
       <div class="compare-left" style="padding-right:36px;">
-        <p style="font-family:var(--serif); font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; color:var(--text); margin:0 0 10px;">48% better</p>
+        <p style="font-family:var(--serif); font-weight:500; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; color:var(--text); margin:0 0 10px;">48% better</p>
         <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0;">on practice problems, with a plain chatbot.</p>
       </div>
       <div class="compare-right" style="padding-left:36px; border-left:1px solid var(--border);">
-        <p style="font-family:var(--serif); font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; color:var(--text); margin:0 0 10px;">17% worse</p>
+        <p style="font-family:var(--serif); font-weight:500; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; color:var(--text); margin:0 0 10px;">17% worse</p>
         <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0;">on the exam, once it was removed.</p>
       </div>
     </div>
@@ -129,10 +130,10 @@
       <button id="switch-apollo" type="button" data-switch="apollo" style="padding:10px 24px; border:none; border-left:1px solid var(--text); cursor:pointer; background:transparent; color:var(--text);">Apollo</button>
     </div>
     <div id="panel-hoot" style="animation:fadein 160ms ease;">
-      <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:62ch;"><strong style="font-weight:700;">Answers from the course.</strong> Hoot answers only from the material the instructor uploaded, cites where each answer came from, and declines anything outside it.</p>
+      <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:62ch;"><strong style="font-weight:600;">Answers from the course.</strong> Hoot answers only from the material the instructor uploaded, cites where each answer came from, and declines anything outside it.</p>
     </div>
     <div id="panel-apollo" style="display:none;">
-      <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:62ch;"><strong style="font-weight:700;">The student teaches.</strong> The student explains how to solve a problem, in their own words, to an owl that is competent but clueless. The owl asks about exactly the part that was thin or wrong. Nothing in Apollo affects course grades.</p>
+      <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:62ch;"><strong style="font-weight:600;">The student teaches.</strong> The student explains how to solve a problem, in their own words, to an owl that is competent but clueless. The owl asks about exactly the part that was thin or wrong. Nothing in Apollo affects course grades.</p>
     </div>
   </section>
 
@@ -180,15 +181,15 @@
         <text x="124" y="143" text-anchor="middle" fill="var(--muted)" style="font-family:var(--mono); font-size:9px; letter-spacing:0.14em;">0</text>
         <line x1="294" y1="125" x2="294" y2="131" stroke="var(--muted)" stroke-width="1" vector-effect="non-scaling-stroke"/>
         <text x="294" y="143" text-anchor="middle" fill="var(--muted)" style="font-family:var(--mono); font-size:9px; letter-spacing:0.14em;">1.0</text>
-        <text x="114" y="29" text-anchor="end" fill="var(--text)" style="font-family:var(--serif); font-size:11.5px;">Human tutors</text>
+        <text x="114" y="29" text-anchor="end" fill="var(--text)" style="font-family:var(--sans); font-size:11px;">Human tutors</text>
         <rect x="124" y="18" width="134.3" height="14" fill="none" stroke="var(--text)" stroke-width="1.25" vector-effect="non-scaling-stroke"/>
-        <text x="265" y="29" fill="var(--text)" style="font-family:var(--serif); font-size:11.5px;">0.79</text>
-        <text x="114" y="69" text-anchor="end" fill="var(--text)" style="font-family:var(--serif); font-size:11.5px;">Step-level systems</text>
+        <text x="265" y="29" fill="var(--text)" style="font-family:var(--sans); font-size:11px;">0.79</text>
+        <text x="114" y="69" text-anchor="end" fill="var(--text)" style="font-family:var(--sans); font-size:11px;">Step-level systems</text>
         <rect x="124" y="58" width="129.2" height="14" fill="none" stroke="var(--text)" stroke-width="1.25" vector-effect="non-scaling-stroke"/>
-        <text x="260" y="69" fill="var(--text)" style="font-family:var(--serif); font-size:11.5px;">0.76</text>
-        <text x="114" y="109" text-anchor="end" fill="var(--text)" style="font-family:var(--serif); font-size:11.5px;">Answer-only systems</text>
+        <text x="260" y="69" fill="var(--text)" style="font-family:var(--sans); font-size:11px;">0.76</text>
+        <text x="114" y="109" text-anchor="end" fill="var(--text)" style="font-family:var(--sans); font-size:11px;">Answer-only systems</text>
         <rect x="124" y="98" width="52.7" height="14" fill="none" stroke="var(--text)" stroke-width="1.25" vector-effect="non-scaling-stroke"/>
-        <text x="184" y="109" fill="var(--text)" style="font-family:var(--serif); font-size:11.5px;">0.31</text>
+        <text x="184" y="109" fill="var(--text)" style="font-family:var(--sans); font-size:11px;">0.31</text>
       </svg>
     </figure>
     <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:22px 0 0; max-width:62ch;">Effect sizes from VanLehn's review (2011). These figures are from prior research on other systems. Hoot has no outcome data yet.</p>
@@ -223,11 +224,11 @@
     <h2 style="font-family:var(--serif); font-weight:700; font-size:31px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 32px;"><span class="fwn">Students </span>chose to teach</h2>
     <div class="compare figures" style="display:grid; grid-template-columns:1fr 1fr; gap:0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:28px 0;">
       <div class="compare-left" style="padding-right:36px;">
-        <p style="font-family:var(--serif); font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; color:var(--text); margin:0 0 10px;">47%</p>
+        <p style="font-family:var(--serif); font-weight:500; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; color:var(--text); margin:0 0 10px;">47%</p>
         <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0;">of the class taught Apollo in week one.</p>
       </div>
       <div class="compare-right" style="padding-left:36px; border-left:1px solid var(--border);">
-        <p style="font-family:var(--serif); font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; color:var(--text); margin:0 0 10px;">119</p>
+        <p style="font-family:var(--serif); font-weight:500; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; color:var(--text); margin:0 0 10px;">119</p>
         <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0;">teaching attempts.</p>
       </div>
     </div>
@@ -238,7 +239,7 @@
     <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 12px;">Questions</div>
 
     <div data-faq-item style="border-top:1px solid var(--border);">
-      <button type="button" data-faq-toggle style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; background:none; border:none; cursor:pointer; text-align:left; font-family:var(--serif); font-size:19px; color:var(--text);">
+      <button type="button" data-faq-toggle style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; background:none; border:none; cursor:pointer; text-align:left; font-family:var(--serif); font-weight:500; font-size:19px; color:var(--text);">
         <span>How is this different from MATHia, Khanmigo or LearnLM?</span>
         <span data-faq-icon style="font-family:var(--mono); font-size:20px; line-height:1; color:var(--muted); transition:transform 180ms ease; transform:rotate(0deg);">+</span>
       </button>
@@ -246,7 +247,7 @@
     </div>
 
     <div data-faq-item style="border-top:1px solid var(--border);">
-      <button type="button" data-faq-toggle style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; background:none; border:none; cursor:pointer; text-align:left; font-family:var(--serif); font-size:19px; color:var(--text);">
+      <button type="button" data-faq-toggle style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; background:none; border:none; cursor:pointer; text-align:left; font-family:var(--serif); font-weight:500; font-size:19px; color:var(--text);">
         <span>Can it answer outside the course material?</span>
         <span data-faq-icon style="font-family:var(--mono); font-size:20px; line-height:1; color:var(--muted); transition:transform 180ms ease; transform:rotate(0deg);">+</span>
       </button>
@@ -254,7 +255,7 @@
     </div>
 
     <div data-faq-item style="border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
-      <button type="button" data-faq-toggle style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; background:none; border:none; cursor:pointer; text-align:left; font-family:var(--serif); font-size:19px; color:var(--text);">
+      <button type="button" data-faq-toggle style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; background:none; border:none; cursor:pointer; text-align:left; font-family:var(--serif); font-weight:500; font-size:19px; color:var(--text);">
         <span>What does an instructor control?</span>
         <span data-faq-icon style="font-family:var(--mono); font-size:20px; line-height:1; color:var(--muted); transition:transform 180ms ease; transform:rotate(0deg);">+</span>
       </button>
@@ -281,8 +282,8 @@
     </div>
     <p style="font-size:18px; line-height:1.65; color:var(--text); margin:30px 0 0; max-width:62ch;">Hoot is built by Ishaan Batra and Alfonso Macarrein and was awarded a research grant. Access is by request. If you are planning a study, or want to see how it works, we would be glad to talk.</p>
     <div class="contact" style="display:flex; align-items:center; gap:28px; flex-wrap:wrap; margin:28px 0 0;">
-      <a href="https://www.linkedin.com/in/ishaanbatra1/" target="_blank" rel="noopener" style="font-family:var(--serif); font-size:17px; color:var(--text); border-bottom:1px solid var(--text); padding-bottom:2px;">Ishaan Batra on LinkedIn</a>
-      <a href="https://www.linkedin.com/in/alfonso-macarrein/" target="_blank" rel="noopener" style="font-family:var(--serif); font-size:17px; color:var(--text); border-bottom:1px solid var(--text); padding-bottom:2px;">Alfonso Macarrein on LinkedIn</a>
+      <a href="https://www.linkedin.com/in/ishaanbatra1/" target="_blank" rel="noopener" style="font-family:var(--sans); font-size:17px; color:var(--text); border-bottom:1px solid var(--text); padding-bottom:2px;">Ishaan Batra on LinkedIn</a>
+      <a href="https://www.linkedin.com/in/alfonso-macarrein/" target="_blank" rel="noopener" style="font-family:var(--sans); font-size:17px; color:var(--text); border-bottom:1px solid var(--text); padding-bottom:2px;">Alfonso Macarrein on LinkedIn</a>
     </div>
   </section>
 
