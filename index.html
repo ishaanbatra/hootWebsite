@@ -4,10 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hoot: a research platform for AI in education</title>
+<script>document.documentElement.classList.add("js");</script>
 <meta name="description" content="An AI tutor you can take apart, on a platform built to run the study. For researchers, faculty and instructors studying AI in education.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,500;8..60,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@400;500&amp;family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&amp;display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#ece3d2; --bg-soft:#e4d9c3; --bg-panel:#fbf6ea;
@@ -26,7 +27,7 @@
 
   /* mixed-weight display headings: base bold, spans opt back to normal */
   h1, h2{ margin:0; }
-  .fwn{ font-weight:500; }
+  .fwn{ font-weight:400; }
 
   /* interactive pseudo-states (inline styles can't express these) */
   .btn-solid{ background:#000; }
@@ -36,8 +37,27 @@
   #hoot-owl{ position:fixed; left:0; top:0; width:80px; height:80px; z-index:-1; pointer-events:none; opacity:0; transition:opacity 500ms ease; will-change:transform; }
   #hoot-owl img{ display:block; width:100%; height:100%; object-fit:contain; }
 
+  /* pages: one file, one view shown at a time (hash-routed) */
+  .js .view:not(.is-active){ display:none; }
+  .nav-links a[aria-current="page"]{ color:var(--text) !important; }
+
+  /* request-access form */
+  .access-form{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:26px 24px; margin:44px 0 0; max-width:620px; }
+  .access-form .field{ display:flex; flex-direction:column; gap:8px; }
+  .access-form input{ width:100%; min-height:52px; margin:0; padding:14px 16px; border:1px solid var(--border); border-radius:0; background:var(--bg-panel); font:400 16px/1.4 var(--sans); color:var(--text); outline:none; }
+  .access-form input:focus{ border-color:var(--text); }
+  .access-form .form-actions{ grid-column:1/-1; display:flex; align-items:center; gap:20px; flex-wrap:wrap; margin-top:6px; }
+  .access-form .form-note{ margin:0; font-size:15px; color:var(--muted); }
+  .access-form button[disabled]{ opacity:.6; cursor:default; }
+  .access-form .honey{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+  .access-done{ display:none; }
+  .is-sent .access-form, .is-sent .access-intro{ display:none; }
+  .is-sent .access-done{ display:block; }
+
   @media (max-width:680px){
-    .nav-links{ display:none !important; }
+    header nav{ flex-wrap:wrap; row-gap:10px !important; }
+    .nav-links{ order:3; width:100%; gap:22px !important; }
+    .access-form{ grid-template-columns:1fr; }
     .compare{ grid-template-columns:1fr !important; }
     .compare-left{ padding-right:0 !important; }
     .row{ grid-template-columns:1fr !important; gap:6px !important; }
@@ -60,24 +80,23 @@
 
 <header style="position:sticky; top:0; z-index:50; background:var(--bg); border-bottom:1px solid var(--border);">
   <nav style="max-width:760px; margin:0 auto; padding:15px 24px; display:flex; align-items:center; justify-content:space-between; gap:24px;">
-    <a href="#top" style="display:flex; align-items:center; gap:10px; color:var(--text);">
+    <a href="#home" style="display:flex; align-items:center; gap:10px; color:var(--text);">
       <span style="font-family:var(--serif); font-size:21px; font-weight:500; letter-spacing:-0.01em;">Hoot</span>
     </a>
     <div class="nav-links" style="display:flex; align-items:center; gap:26px; font-family:var(--mono); font-size:11px; letter-spacing:0.11em; text-transform:uppercase; color:var(--muted);">
-      <a href="#problem" style="color:var(--muted);">Problem</a>
-      <a href="#functions" style="color:var(--muted);">Functions</a>
-      <a href="#trust" style="color:var(--muted);">Trust</a>
-      <a href="#research" style="color:var(--muted);">Research</a>
+      <a href="#how" data-nav="how" style="color:var(--muted);">How it works</a>
+      <a href="#research" data-nav="research" style="color:var(--muted);">Research</a>
     </div>
-    <a href="#access" style="font-family:var(--mono); font-size:11px; letter-spacing:0.11em; text-transform:uppercase; color:var(--text); border-bottom:1px solid var(--text); padding-bottom:2px;">Request access</a>
+    <a href="#access" data-nav="access" style="font-family:var(--mono); font-size:11px; letter-spacing:0.11em; text-transform:uppercase; color:var(--text); border-bottom:1px solid var(--text); padding-bottom:2px;">Request access</a>
   </nav>
 </header>
 
 <main id="top">
 
+<div class="view is-active" data-view="home">
+
   <section style="max-width:760px; margin:0 auto; padding:96px 24px 76px;">
-    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 26px;">A research platform for AI in education</div>
-    <h1 style="font-family:var(--serif); font-weight:500; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; margin:0 0 26px; max-width:19ch;">An AI tutor you can take apart, on a platform built to run the study.</h1>
+    <h1 style="font-family:var(--serif); font-weight:400; font-variation-settings:'opsz' 28; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; margin:0 0 26px; max-width:19ch;">An AI tutor you can take apart, on a platform built to run the study.</h1>
     <p style="font-size:19px; line-height:1.6; color:var(--muted); margin:0 0 34px; max-width:56ch;">Hoot is two tutoring functions that switch on separately, and the study infrastructure around them: assignment, logging, consent and export. It is for researchers, faculty and instructors who want to know which part of an AI tutor does what.</p>
     <div class="hero-cta" style="display:flex; align-items:center; gap:24px; flex-wrap:wrap;">
       <a class="btn-solid" href="#access" style="color:var(--bg); font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; padding:14px 26px;">Request access</a>
@@ -86,15 +105,14 @@
   </section>
 
   <section id="problem" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--text); scroll-margin-top:76px;">
-    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 14px;">The problem</div>
-    <h2 style="font-family:var(--serif); font-weight:700; font-size:31px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 32px;"><span class="fwn">Performance is </span>not learning</h2>
+    <h2 style="font-family:var(--serif); font-weight:600; font-variation-settings:'opsz' 28; font-size:31px; line-height:1.18; letter-spacing:-0.02em; margin:0 0 32px;"><span class="fwn">Performance is </span>not learning</h2>
     <div class="compare figures" style="display:grid; grid-template-columns:1fr 1fr; gap:0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:28px 0;">
       <div class="compare-left" style="padding-right:36px;">
-        <p style="font-family:var(--serif); font-weight:500; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; color:var(--text); margin:0 0 10px;">48% better</p>
+        <p style="font-family:var(--serif); font-weight:400; font-variation-settings:'opsz' 28; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; color:var(--text); margin:0 0 10px;">48% better</p>
         <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0;">on practice problems, with a plain chatbot.</p>
       </div>
       <div class="compare-right" style="padding-left:36px; border-left:1px solid var(--border);">
-        <p style="font-family:var(--serif); font-weight:500; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; color:var(--text); margin:0 0 10px;">17% worse</p>
+        <p style="font-family:var(--serif); font-weight:400; font-variation-settings:'opsz' 28; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; color:var(--text); margin:0 0 10px;">17% worse</p>
         <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0;">on the exam, once it was removed.</p>
       </div>
     </div>
@@ -103,8 +121,7 @@
   </section>
 
   <section id="gap" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--text); scroll-margin-top:76px;">
-    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 14px;">The gap</div>
-    <h2 style="font-family:var(--serif); font-weight:700; font-size:31px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 20px;"><span class="fwn">What current studies </span>can't tell you</h2>
+    <h2 style="font-family:var(--serif); font-weight:600; font-variation-settings:'opsz' 28; font-size:31px; line-height:1.18; letter-spacing:-0.02em; margin:0 0 20px;"><span class="fwn">What current studies </span>can't tell you</h2>
     <div class="rows" style="margin:12px 0 0; border-bottom:1px solid var(--border);">
       <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
         <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">AI or no AI</div>
@@ -121,25 +138,50 @@
     </div>
   </section>
 
-  <section id="functions" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--text); scroll-margin-top:76px;">
-    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 14px;">Two functions</div>
-    <h2 style="font-family:var(--serif); font-weight:700; font-size:31px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 20px;">Two functions<span class="fwn">, switched on </span>separately</h2>
-    <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0 0 28px; max-width:62ch;">Each can run alone or together, so a study can test one against the other.</p>
+  <section id="adds" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--text); scroll-margin-top:76px;">
+    <h2 style="font-family:var(--serif); font-weight:600; font-variation-settings:'opsz' 28; font-size:31px; line-height:1.18; letter-spacing:-0.02em; margin:0 0 20px;"><span class="fwn">What this adds </span>to the field</h2>
+    <div class="rows" style="margin:12px 0 0; border-bottom:1px solid var(--border);">
+      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Separately</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">AI functions tested one at a time, not as a single product.</div>
+      </div>
+      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Step by step</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">Designs documented at the level of each step.</div>
+      </div>
+      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
+        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Reusable</div>
+        <div style="font-size:17px; line-height:1.55; color:var(--text);">Infrastructure that carries to the next study.</div>
+      </div>
+    </div>
+    <p style="font-size:18px; line-height:1.65; color:var(--text); margin:30px 0 0; max-width:62ch;">Hoot is built by Ishaan Batra and Alfonso Macarrein and was awarded a research grant. Access is by request. If you are planning a study, or want to see how it works, we would be glad to talk.</p>
+    <div class="page-actions" style="display:flex; align-items:center; gap:24px; flex-wrap:wrap; margin:34px 0 0;">
+      <a class="btn-solid" href="#access" style="color:var(--bg); font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; padding:14px 26px;">Request access</a>
+      <a href="#how" style="font-family:var(--sans); font-size:17px; color:var(--muted); border-bottom:1px solid var(--border); padding-bottom:2px;">How it works →</a>
+    </div>
+  </section>
+
+</div>
+
+<div class="view" data-view="how">
+
+  <section id="functions" style="max-width:760px; margin:0 auto; padding:96px 24px 80px;">
+    <h1 style="font-family:var(--serif); font-weight:400; font-variation-settings:'opsz' 28; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; margin:0 0 26px;">Two functions, switched on separately.</h1>
+    <p style="font-size:19px; line-height:1.6; color:var(--muted); margin:0 0 34px; max-width:56ch;">Each can run alone or together, so a study can test one against the other.</p>
     <div style="display:inline-flex; border:1px solid var(--text); margin:0 0 30px; font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em;">
       <button id="switch-hoot" type="button" data-switch="hoot" style="padding:10px 24px; border:none; cursor:pointer; background:#000000; color:var(--bg);">Hoot</button>
       <button id="switch-apollo" type="button" data-switch="apollo" style="padding:10px 24px; border:none; border-left:1px solid var(--text); cursor:pointer; background:transparent; color:var(--text);">Apollo</button>
     </div>
     <div id="panel-hoot" style="animation:fadein 160ms ease;">
-      <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:62ch;"><strong style="font-weight:600;">Answers from the course.</strong> Hoot answers only from the material the instructor uploaded, cites where each answer came from, and declines anything outside it.</p>
+      <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:62ch;"><strong style="font-weight:500;">Answers from the course.</strong> Hoot answers only from the material the instructor uploaded, cites where each answer came from, and declines anything outside it.</p>
     </div>
     <div id="panel-apollo" style="display:none;">
-      <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:62ch;"><strong style="font-weight:600;">The student teaches.</strong> The student explains how to solve a problem, in their own words, to an owl that is competent but clueless. The owl asks about exactly the part that was thin or wrong. Nothing in Apollo affects course grades.</p>
+      <p style="font-size:18px; line-height:1.65; color:var(--text); margin:0; max-width:62ch;"><strong style="font-weight:500;">The student teaches.</strong> The student explains how to solve a problem, in their own words, to an owl that is competent but clueless. The owl asks about exactly the part that was thin or wrong. Nothing in Apollo affects course grades.</p>
     </div>
   </section>
 
   <section id="trust" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--text); scroll-margin-top:76px;">
-    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 14px;">Why the responses can be trusted</div>
-    <h2 style="font-family:var(--serif); font-weight:700; font-size:31px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 20px;">Three <span class="fwn">rules</span></h2>
+    <h2 style="font-family:var(--serif); font-weight:600; font-variation-settings:'opsz' 28; font-size:31px; line-height:1.18; letter-spacing:-0.02em; margin:0 0 20px;"><span class="fwn">Why the responses </span>can be trusted</h2>
     <div class="rows" style="margin:12px 0 0; border-bottom:1px solid var(--border);">
       <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
         <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">The judge never writes</div>
@@ -157,8 +199,7 @@
   </section>
 
   <section id="science" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--text); scroll-margin-top:76px;">
-    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 14px;">Grounded in learning science</div>
-    <h2 style="font-family:var(--serif); font-weight:700; font-size:31px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 20px;"><span class="fwn">Each part comes from </span>the literature</h2>
+    <h2 style="font-family:var(--serif); font-weight:600; font-variation-settings:'opsz' 28; font-size:31px; line-height:1.18; letter-spacing:-0.02em; margin:0 0 20px;"><span class="fwn">Each part comes from </span>the literature</h2>
     <div class="rows" style="margin:12px 0 0; border-bottom:1px solid var(--border);">
       <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
         <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Self-explanation</div>
@@ -193,12 +234,19 @@
       </svg>
     </figure>
     <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:22px 0 0; max-width:62ch;">Effect sizes from VanLehn's review (2011). These figures are from prior research on other systems. Hoot has no outcome data yet.</p>
+    <div class="page-actions" style="display:flex; align-items:center; gap:24px; flex-wrap:wrap; margin:44px 0 0;">
+      <a class="btn-solid" href="#research" style="color:var(--bg); font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; padding:14px 26px;">Built for research →</a>
+      <a href="#access" style="font-family:var(--sans); font-size:17px; color:var(--muted); border-bottom:1px solid var(--border); padding-bottom:2px;">Request access</a>
+    </div>
   </section>
 
-  <section id="research" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--text); scroll-margin-top:76px;">
-    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 14px;">Built for research</div>
-    <h2 style="font-family:var(--serif); font-weight:700; font-size:31px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 20px;">Four things <span class="fwn">a study needs</span></h2>
-    <div class="rows" style="margin:12px 0 0; border-bottom:1px solid var(--border);">
+</div>
+
+<div class="view" data-view="research">
+
+  <section id="platform" style="max-width:760px; margin:0 auto; padding:96px 24px 80px;">
+    <h1 style="font-family:var(--serif); font-weight:400; font-variation-settings:'opsz' 28; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; margin:0 0 26px;">Four things a study needs.</h1>
+    <div class="rows" style="margin:8px 0 0; border-bottom:1px solid var(--border);">
       <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
         <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Study design</div>
         <div style="font-size:17px; line-height:1.55; color:var(--text);">Arms, access gating and stratified assignment are settings.</div>
@@ -220,23 +268,22 @@
   </section>
 
   <section id="pilot" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--text); scroll-margin-top:76px;">
-    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 14px;">Early pilot · usage data, not learning outcomes</div>
-    <h2 style="font-family:var(--serif); font-weight:700; font-size:31px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 32px;"><span class="fwn">Students </span>chose to teach</h2>
+    <h2 style="font-family:var(--serif); font-weight:600; font-variation-settings:'opsz' 28; font-size:31px; line-height:1.18; letter-spacing:-0.02em; margin:0 0 32px;"><span class="fwn">Early pilot: </span>usage, not outcomes</h2>
     <div class="compare figures" style="display:grid; grid-template-columns:1fr 1fr; gap:0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:28px 0;">
       <div class="compare-left" style="padding-right:36px;">
-        <p style="font-family:var(--serif); font-weight:500; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; color:var(--text); margin:0 0 10px;">47%</p>
+        <p style="font-family:var(--serif); font-weight:400; font-variation-settings:'opsz' 28; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; color:var(--text); margin:0 0 10px;">47%</p>
         <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0;">of the class taught Apollo in week one.</p>
       </div>
       <div class="compare-right" style="padding-left:36px; border-left:1px solid var(--border);">
-        <p style="font-family:var(--serif); font-weight:500; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; color:var(--text); margin:0 0 10px;">119</p>
+        <p style="font-family:var(--serif); font-weight:400; font-variation-settings:'opsz' 28; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; color:var(--text); margin:0 0 10px;">119</p>
         <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:0;">teaching attempts.</p>
       </div>
     </div>
     <p style="font-size:18px; line-height:1.65; color:var(--text); margin:30px 0 0; max-width:62ch;">Apollo was fully optional. Self-reported use matched the logs. These numbers describe use. They say nothing yet about learning.</p>
   </section>
 
-  <section id="faq" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--text);">
-    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 12px;">Questions</div>
+  <section id="faq" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--text); scroll-margin-top:76px;">
+    <h2 style="font-family:var(--serif); font-weight:600; font-variation-settings:'opsz' 28; font-size:31px; line-height:1.18; letter-spacing:-0.02em; margin:0 0 20px;">Questions</h2>
 
     <div data-faq-item style="border-top:1px solid var(--border);">
       <button type="button" data-faq-toggle style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:20px; padding:22px 0; background:none; border:none; cursor:pointer; text-align:left; font-family:var(--serif); font-weight:500; font-size:19px; color:var(--text);">
@@ -261,31 +308,35 @@
       </button>
       <div data-faq-panel style="display:grid; grid-template-rows:0fr; transition:grid-template-rows 180ms ease;"><div style="overflow:hidden;"><p style="margin:0; padding:0 0 24px; color:var(--muted); font-size:17px; line-height:1.6; max-width:60ch;">Which material is uploaded, which functions are on, and the study settings.</p></div></div>
     </div>
+    <div class="page-actions" style="display:flex; align-items:center; gap:24px; flex-wrap:wrap; margin:44px 0 0;">
+      <a class="btn-solid" href="#access" style="color:var(--bg); font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; padding:14px 26px;">Request access</a>
+    </div>
   </section>
 
-  <section id="access" style="max-width:760px; margin:0 auto; padding:80px 24px; border-top:1px solid var(--text); scroll-margin-top:76px;">
-    <div style="font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.14em; color:var(--muted); margin:0 0 14px;">Request access</div>
-    <h2 style="font-family:var(--serif); font-weight:700; font-size:31px; line-height:1.18; letter-spacing:-0.01em; margin:0 0 20px;"><span class="fwn">What this adds </span>to the field</h2>
-    <div class="rows" style="margin:12px 0 0; border-bottom:1px solid var(--border);">
-      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
-        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Separately</div>
-        <div style="font-size:17px; line-height:1.55; color:var(--text);">AI functions tested one at a time, not as a single product.</div>
-      </div>
-      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
-        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Step by step</div>
-        <div style="font-size:17px; line-height:1.55; color:var(--text);">Designs documented at the level of each step.</div>
-      </div>
-      <div class="row" style="display:grid; grid-template-columns:150px 1fr; gap:20px; padding:20px 0; border-top:1px solid var(--border);">
-        <div style="font-family:var(--mono); font-size:12px; letter-spacing:0.04em; color:var(--muted);">Reusable</div>
-        <div style="font-size:17px; line-height:1.55; color:var(--text);">Infrastructure that carries to the next study.</div>
-      </div>
-    </div>
-    <p style="font-size:18px; line-height:1.65; color:var(--text); margin:30px 0 0; max-width:62ch;">Hoot is built by Ishaan Batra and Alfonso Macarrein and was awarded a research grant. Access is by request. If you are planning a study, or want to see how it works, we would be glad to talk.</p>
-    <div class="contact" style="display:flex; align-items:center; gap:28px; flex-wrap:wrap; margin:28px 0 0;">
+</div>
+
+<div class="view" data-view="access">
+
+  <section id="access-page" data-form-scope style="max-width:760px; margin:0 auto; padding:96px 24px 80px;">
+    <h1 style="font-family:var(--serif); font-weight:400; font-variation-settings:'opsz' 28; font-size:clamp(34px,6vw,52px); line-height:1.08; letter-spacing:-0.02em; margin:0 0 26px;">Request access.</h1>
+    <p class="access-intro" style="font-size:19px; line-height:1.6; color:var(--muted); margin:0; max-width:40ch;">Access is by request. Tell us where to reach you and one of us will get back to you.</p>
+    <form class="access-form" id="access-form" novalidate>
+      <div class="field"><label for="a-first" style="font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted);">First name</label><input id="a-first" name="first_name" type="text" autocomplete="given-name" required></div>
+      <div class="field"><label for="a-last" style="font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted);">Last name</label><input id="a-last" name="last_name" type="text" autocomplete="family-name" required></div>
+      <div class="field"><label for="a-email" style="font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted);">Email</label><input id="a-email" name="email" type="email" autocomplete="email" inputmode="email" required></div>
+      <div class="field"><label for="a-inst" style="font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted);">Institution</label><input id="a-inst" name="institution" type="text" autocomplete="organization" required></div>
+      <div class="honey" aria-hidden="true"><label for="a-honey">Leave blank</label><input id="a-honey" name="_honey" type="text" tabindex="-1" autocomplete="off"></div>
+      <div class="form-actions"><button class="btn-solid" type="submit" style="color:var(--bg); border:none; border-radius:0; padding:14px 28px; font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; cursor:pointer;">Request access</button><p class="form-note" aria-live="polite"></p></div>
+    </form>
+    <p class="access-done" aria-live="polite" style="font-size:18px; line-height:1.65; color:var(--text); margin:44px 0 0; padding:24px 0 0; border-top:1px solid var(--border); max-width:62ch;">Thanks. One of us will reach out.</p>
+    <p style="font-size:16px; line-height:1.6; color:var(--muted); margin:44px 0 0; max-width:62ch;">Or reach us directly.</p>
+    <div class="page-actions" style="display:flex; align-items:center; gap:24px; flex-wrap:wrap; margin:16px 0 0;">
       <a href="https://www.linkedin.com/in/ishaanbatra1/" target="_blank" rel="noopener" style="font-family:var(--sans); font-size:17px; color:var(--text); border-bottom:1px solid var(--text); padding-bottom:2px;">Ishaan Batra on LinkedIn</a>
       <a href="https://www.linkedin.com/in/alfonso-macarrein/" target="_blank" rel="noopener" style="font-family:var(--sans); font-size:17px; color:var(--text); border-bottom:1px solid var(--text); padding-bottom:2px;">Alfonso Macarrein on LinkedIn</a>
     </div>
   </section>
+
+</div>
 
 </main>
 
@@ -301,6 +352,61 @@
   var reducedMotion = function () {
     return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   };
+
+  /* ---------- Pages: hash-routed views in one file ---------- */
+  (function () {
+    var views = [].slice.call(document.querySelectorAll("[data-view]"));
+    var navs = [].slice.call(document.querySelectorAll("[data-nav]"));
+    var base = document.title;
+    var titles = { home: base, how: "How it works · Hoot", research: "Built for research · Hoot", access: "Request access · Hoot" };
+    var current = "home";
+    function top() { window.scrollTo({ top: 0, left: 0, behavior: "instant" }); }
+    function show(name) {
+      current = name;
+      views.forEach(function (v) { v.classList.toggle("is-active", v.getAttribute("data-view") === name); });
+      navs.forEach(function (n) {
+        if (n.getAttribute("data-nav") === name) n.setAttribute("aria-current", "page"); else n.removeAttribute("aria-current");
+      });
+      document.title = titles[name] || base;
+    }
+    function has(name) { return views.some(function (v) { return v.getAttribute("data-view") === name; }); }
+    function route() {
+      var id = decodeURIComponent(location.hash.slice(1));
+      if (!id || id === "top" || id === "home") { if (current !== "home") show("home"); top(); return; }
+      if (has(id)) { show(id); top(); return; }
+      // an anchor inside a hidden page opens that page first
+      var el = document.getElementById(id);
+      var view = el && el.closest("[data-view]");
+      if (view && current !== view.getAttribute("data-view")) { show(view.getAttribute("data-view")); el.scrollIntoView(); }
+    }
+    window.addEventListener("hashchange", route);
+    route();
+  })();
+
+  /* ---------- Request-access form ---------- */
+  (function () {
+    // Where the request goes. FormSubmit forwards it to this inbox with no
+    // account; swap the URL to use another service.
+    var ENDPOINT = "https://formsubmit.co/ajax/hello@hoot.study";
+    var form = document.getElementById("access-form");
+    if (!form) return;
+    var scope = form.closest("[data-form-scope]");
+    var note = form.querySelector(".form-note");
+    var button = form.querySelector('button[type="submit"]');
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!form.checkValidity()) { note.textContent = "Please fill in every field."; form.querySelector(":invalid").focus(); return; }
+      var data = {};
+      new FormData(form).forEach(function (v, k) { data[k] = v; });
+      if (data._honey) return;
+      data._subject = "Hoot access request · " + data.first_name + " " + data.last_name;
+      data._template = "table";
+      button.disabled = true; note.textContent = "Sending…";
+      fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" }, body: JSON.stringify(data) })
+        .then(function (res) { if (!res.ok) throw new Error(res.status); scope.classList.add("is-sent"); note.textContent = ""; })
+        .catch(function () { note.textContent = "That didn't send. Reach us on LinkedIn below."; button.disabled = false; });
+    });
+  })();
 
   /* ---------- Product switcher (Hoot ⇄ Apollo) ---------- */
   (function () {
@@ -405,20 +511,26 @@
       // choreography: each scene anchors the owl's FEET (or head-top for hanging)
       // to a piece of page structure, per the reference shots
       var scenes = [
+        // home
         { anchor: ".hero-cta a", frame: "peek", mode: "feet", lift: -14, pt: function (r, d) { return { x: r.left + r.width * 0.6, y: r.top + 12 }; } },
         { anchor: "#problem .pull", frame: "peekl", mode: "feet", lift: 0, arrive: 0.5, pt: function (r, d) { return { x: r.left - d.w * 0.5 + 1, y: r.bottom }; } },
         { anchor: "#gap", frame: "hang", mode: "top", lift: 44, pt: function (r, d) { return { x: r.right - 140, y: r.top - 3 }; } },
-        { anchor: "#functions > div", frame: "wave2", mode: "feet", size: 0.68, pt: function (r, d) { return { x: r.left + d.w * 0.5 + 4, y: r.top - 8 }; } },
-        { anchor: "#trust .row", frame: "stand", mode: "feet", size: 0.8, lift: 110, pt: function (r, d) { return { x: r.right - 90, y: r.top + 1 }; } },
+        { anchor: "#adds", frame: "sleep", flip: true, mode: "feet", size: 0.85, lift: 8, pt: function (r, d) { return { x: r.right - 60, y: r.top + 1 }; } },
+        // how it works
+        { anchor: "#functions h1", frame: "wave2", mode: "feet", size: 0.68, pt: function (r, d) { return { x: r.left + d.w * 0.5 + 4, y: r.top - 8 }; } },
+        { anchor: "#trust .row", frame: "stand", mode: "feet", size: 0.8, lift: 80, pt: function (r, d) { return { x: r.right - 90, y: r.top + 1 }; } },
         { anchor: "#science svg", frame: "wave", mode: "feet", size: 0.6, lift: 90, pt: function (r, d) { return { x: r.left + r.width * 0.93, y: r.top + r.height * 0.853 }; } },
-        { anchor: "#research .row", frame: "flap", mode: "feet", size: 0.8, pt: function (r, d) { return { x: r.right - 90, y: r.top + 1 }; } },
+        // research
+        { anchor: "#platform .row", frame: "flap", mode: "feet", size: 0.8, pt: function (r, d) { return { x: r.right - 90, y: r.top + 1 }; } },
         { anchor: "#pilot .figures", frame: "perch", mode: "feet", size: 0.8, pt: function (r, d) { return { x: r.right - 70, y: r.top + 1 }; } },
         { anchor: "#faq button", frame: "sleep", mode: "feet", pt: function (r, d) { return { x: r.right - 54, y: r.top - 1 }; } },
-        { anchor: "#access", frame: "sleep", flip: true, mode: "feet", size: 0.85, lift: 8, pt: function (r, d) { return { x: r.right - 60, y: r.top + 1 }; } }
+        // request access
+        { anchor: '#access-form button[type="submit"]', frame: "peek", mode: "feet", lift: 8, pt: function (r, d) { return { x: r.left + r.width / 2, y: r.top + 12 }; } }
       ];
-      // a scene whose anchor is missing is skipped, not fatal
-      scenes = scenes.filter(function (s) { s.r = rect(s.anchor); return !!s.r; });
-      if (!scenes.length) return;
+      // only the scenes on the page being shown; a missing or hidden anchor is
+      // skipped, not fatal
+      scenes = scenes.filter(function (s) { s.r = rect(s.anchor); return !!s.r && (s.r.width > 0 || s.r.height > 0); });
+      if (!scenes.length) { el.style.opacity = "0"; return; }
 
       var dims = function (f, mul) {
         var nat = imgs[f];
@@ -441,7 +553,7 @@
 
       // corridor route between two perches: out to the margin, along it, back in
       var half = H * 0.6;
-      var mr = rect("#problem") || rect("main");
+      var mr = rect("header nav");
       var corrL = Math.max(half + 6, (mr ? mr.left : 0) - 44);
       var corrR = Math.min(vw - half - 6, (mr ? mr.right : vw) + 44);
       var route = function (a, b, liftA, liftB) {
@@ -480,6 +592,7 @@
         var ideal = pts[ti + 1].y - vh * 0.62;
         var G0 = legs[ti].len / R;
         var d0 = Math.max(T[ti] + 140, Math.min(ideal - G0, T[ti] + 300));
+        if (ti === 0) d0 = Math.max(d0, 40);   // every page opens with the owl perched, not mid-flight
         D.push(d0);
         T.push(Math.min(d0 + G0, maxSc - 12));
       }
